@@ -109,7 +109,10 @@ news = dfm_latest_results.news(dfm_previous_results,
 # %%
 news.summary()
 # %%
-news_df = news.details_by_impact.reset_index()
+news_df = news.details_by_impact.reset_index() \
+              .merge(series[["series", "broad_sector", "topic"]], 
+                     left_on = "updated variable", 
+                     right_on = "series", how = "left").drop("series", axis = 1)
 news_df["impact date"] = pd.PeriodIndex(news_df["impact date"]).to_timestamp(freq="Q")
 news_df["quarter"] = str(today_q)
 news_df["date"] = today
@@ -121,10 +124,3 @@ news_all = pd.concat([news_old, news_df[news_old.columns]])
 news_all.tail()
 # %%
 news_all.to_csv("../nowcast/news.csv", index = False)
-# %%
-news_all = pd.read_csv("../nowcast/news.csv")
-# %%
-news_all.merge(series[["series", "broad_sector", "topic"]], 
-               left_on = "updated variable", 
-               right_on = "series", how = "left")
-# %%
