@@ -121,3 +121,10 @@ news_all = pd.concat([news_old, news_df[news_old.columns]])
 news_all.tail()
 # %%
 news_all.to_csv("../nowcast/news.csv", index = False)
+# %%
+news_all = pd.read_csv("../nowcast/news.csv")
+# %%
+news_all.merge(series[["series", "broad_sector", "topic"]], 
+               left_on = "updated variable", 
+               right_on = "series", how = "left")
+# %%
