@@ -1,5 +1,4 @@
-# Workflow derived from https://github.com/r-lib/actions/tree/master/examples
-# Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
+# Workflow derived from https://www.python-engineer.com/posts/run-python-github-actions/
 name: Run SA Nowcasting Model
 
 on:
@@ -11,7 +10,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  RunSANowcast: # https://www.python-engineer.com/posts/run-python-github-actions/
+  RunSANowcast: 
     runs-on: ubuntu-latest
     steps:
       - name: checkout repo content
