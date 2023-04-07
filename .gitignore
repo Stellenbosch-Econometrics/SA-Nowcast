@@ -9,6 +9,9 @@
 .Ruserdata
 .DS_store
 
+# GIT LFS
+*.git-lfs/
+
 # Example code in package build process
 *-Ex.R
 
