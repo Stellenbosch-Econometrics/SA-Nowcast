@@ -38,6 +38,7 @@ jobs:
 
   # https://www.python-engineer.com/posts/run-python-github-actions/
   RunSANowcast:
+    needs: GenerateNewVintage
     runs-on: ubuntu-latest
     steps:
       - name: checkout repo content
