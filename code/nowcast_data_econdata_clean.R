@@ -6,7 +6,7 @@ options(repos = c(CRAN = "https://cloud.r-project.org"))
 if(!requireNamespace("fastverse", quietly = TRUE)) install.packages("fastverse")
 if(!requireNamespace("samadb", quietly = TRUE)) install.packages("https://www.dropbox.com/s/jpjitlb1njisdfq/samadb_0.2.2.9000.tar.gz?dl=1", repos = NULL, type = "source")
 library(fastverse)
-fastverse_extend(samadb, seastests, seasonal, tseries, tsbox, xts, writexl, install = TRUE)
+fastverse_extend(samadb, seasonal, writexl, install = TRUE) # seastests -> many dependencies, also tsbox, xts, tseries
 
 
 # Seasonally Adjusting Relevant Indicators
@@ -141,8 +141,16 @@ nc_data_m <- sm_data(series = unlist(econdata_monthly, use.names = FALSE))
 nc_data_q <- sm_data(series = unlist(econdata_quarterly, use.names = FALSE)) %>% frename(names_alt, .nse = FALSE)
 
 # Adjusting Monthly Indicators
-nc_seas_m <- nc_data_m %>% num_vars() %>% sapply(isSeasonal, freq = 12) %>% which()
-nc_data_sa_ts <- nc_data_m %>% get_vars(c("date", names(nc_seas_m))) %>% as.xts() %>% ts_ts() %>% spline_impute()
+# nc_data_m %>% num_vars() %>% sapply(isSeasonal, freq = 12) %>% which() %>% names()
+# -> not run because seastest has many dependencies
+nc_seas_m <- c("MTS005_N", "CPI60001", "CPI1000_M_N", "MIG001_A_N0_TA", "MIG001_A_A0_TA", 
+"MIG011_N_A0_TX", "MIG011_N_N0_TX", "MON0088_M", "MON0300_M", 
+"MON0023_M", "MON0191_M", "LIQ002_A_L_A_N", "CURX600_M", "CURM600_M", 
+"NGFC020_M", "NGFC040_M", "NGFC050_M", "NGFC102_M", "NGFC101_M", 
+"NGFC006_M", "NGFC100_M", "NGD1213_M", "NGD1209_M", "NGD4500_M") 
+nc_data_sa_ts <- nc_data_m %>% get_vars(nc_seas_m) %>% qM() %>% 
+  ts(start = c(year(nc_data_m$date[1L]), month(nc_data_m$date[1L])), frequency = 12) %>% 
+  spline_impute()
 
 for(i in seq_col(nc_data_sa_ts)) {
   cat(colnames(nc_data_sa_ts)[i], "\n")
