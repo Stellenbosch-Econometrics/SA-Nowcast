@@ -2,9 +2,9 @@
 # Nowcasting Data EconData Clean
 #######################################
 
-install.packages("https://www.dropbox.com/s/jpjitlb1njisdfq/samadb_0.2.2.9000.tar.gz?dl=1", 
-                 repos = NULL, type = "source")
-options(repos = c(CRAN = "https://cloud.r-project.org"), fastverse.install = TRUE)
+options(repos = c(CRAN = "https://cloud.r-project.org"))
+if(!requireNamespace("fastverse", quietly = TRUE)) install.packages("fastverse")
+if(!requireNamespace("samadb", quietly = TRUE)) install.packages("https://www.dropbox.com/s/jpjitlb1njisdfq/samadb_0.2.2.9000.tar.gz?dl=1", repos = NULL, type = "source")
 library(fastverse)
 fastverse_extend(samadb, seastests, seasonal, tseries, tsbox, xts, writexl, install = TRUE)
 
