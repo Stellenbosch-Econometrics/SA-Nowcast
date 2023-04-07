@@ -126,7 +126,7 @@ nc_ind <- c(econdata_monthly, econdata_quarterly) %>%
   unlist2d(c("broad_sector", "topic", "QB"), "series_alt", DT = TRUE) %>% 
   ftransform(series = X, QB = NULL, X = NULL)
 
-nc_series = fselect(sm_series(), -topic)[series %in% nc_ind$series][nc_ind, on = "series"]
+nc_series = fselect(sm_series(series = nc_ind$series), -topic)[nc_ind, on = "series"]
 settransform(nc_series,
    minimal = topic %in% c("Production", "Sales", "Prices", "Tourism", "Other Real", "Trade", "Cash Flow"),
    series_orig = series, 
