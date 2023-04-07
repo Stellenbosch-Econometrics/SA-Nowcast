@@ -1,0 +1,60 @@
+# Workflow derived from https://github.com/r-lib/actions/tree/master/examples
+# Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
+name: Run SA Nowcasting Model
+
+on:
+  # Every Week Friday at 1:15 AM
+  schedule:
+    - cron: '15 1 * * 5'
+
+  # Optional Workflow Dispatch Trigger
+  workflow_dispatch:
+
+jobs:
+  GenerateNewVintage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: r-lib/actions/setup-r@v2
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          working-directory: "r"
+          cache-version: 2
+          dependencies: "NA" 
+          # https://r-lib.github.io/pkgdepends/reference/pkg_refs.html#github-packages-
+          extra-packages: |
+            cran::fastverse
+            cran::seastests, 
+            cran::seasonal, 
+            cran::tseries, 
+            cran::tsbox, 
+            cran::xts, 
+            cran::writexl
+
+      - name: Generate Vintage
+        run: Rscript ./code/nowcast_data_econdata_clean.R
+      # Commit all changed files back to the repository
+      - uses: stefanzweifel/git-auto-commit-action@v4
+
+  # https://www.python-engineer.com/posts/run-python-github-actions/
+  RunSANowcast:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout repo content
+        uses: actions/checkout@v2 # checkout the repository content
+
+      - name: setup python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10' # install the python version needed
+
+      - name: install python packages
+        run: |
+          python -m pip install --upgrade pip
+          pip install pandas statsmodels
+
+      - name: execute py script
+        run: python code/nowcast_auto_econdata.py
+
+      # Commit all changed files back to the repository
+      - uses: stefanzweifel/git-auto-commit-action@v4
