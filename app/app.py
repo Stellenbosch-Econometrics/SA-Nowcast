@@ -1,16 +1,19 @@
 # Import packages
 from dash import Dash, html, dash_table, dcc
-import plotly.express as px
+# import plotly.express as px
 import plotly.graph_objects as go
 
 # %% 
 import pandas as pd
-nowcast = pd.read_csv("https://raw.githubusercontent.com/Stellenbosch-Econometrics/SA-Nowcast/main/nowcast/nowcast.csv") 
-                      # index_col="date", parse_dates=True)
+nowcast = pd.read_csv("https://raw.githubusercontent.com/Stellenbosch-Econometrics/SA-Nowcast/main/nowcast/nowcast.csv") # index_col="date", parse_dates=True)
 gdp_ld = pd.read_csv("https://raw.githubusercontent.com/Stellenbosch-Econometrics/SA-Nowcast/main/nowcast/gdp_logdiff.csv") # , index_col="quarter", parse_dates=True
 gdp_ld.index = pd.PeriodIndex(gdp_ld.quarter, freq="Q")
 gdp_ld = gdp_ld.loc[gdp_ld.index >= pd.PeriodIndex(nowcast.quarter, freq="Q").min()]
-
+news = pd.read_csv("https://raw.githubusercontent.com/Stellenbosch-Econometrics/SA-Nowcast/main/nowcast/news.csv")
+series = pd.read_csv("https://raw.githubusercontent.com/Stellenbosch-Econometrics/SA-Nowcast/main/nowcast/series.csv")
+news = news.merge(series, 
+                  left_on = "updated variable", 
+                  right_on = "series", how = "left")
 
 # %%
 nowcast_final = nowcast.copy()
@@ -39,13 +42,38 @@ fig.update_layout(hovermode="x")
 # make tight layout
 fig.update_layout(autosize=False, width=750, height=500, 
                   margin=dict(l=20, r=20, t=40, b=20))
+
+
+# News digest
+news_tot = news.loc[news["impacted variable"] == "RGDP"] \
+    .groupby(["broad_sector", "topic"]) \
+    .agg({"weight": "mean", "impact": "mean"}).reset_index() 
+news_tot["sector_topic"] = news_tot.broad_sector + ": " + news_tot.topic
+news_tot["abs_impact"] = news_tot.impact.abs() * 100
+news_tot.head()
+
+# %%
+tot_news_fig = go.Figure()
+tot_news_fig.add_bar(x=news_tot.sector_topic, y=news_tot.abs_impact)
+tot_news_fig.update_layout(title='Average Absolute News Impact on Real GDP',      
+                    xaxis_title='Date', yaxis_title='Average Absolute Impact',
+                    barmode='stack',
+                    hovermode="x", 
+                    autosize=False, width=750, height=500,
+                    margin=dict(l=20, r=20, t=40, b=20))
+
 # 
 app = Dash(__name__)
 
+
 app.layout = html.Div([
-    html.Div(children='My First App with Data'),
+    # html.Div(children='My First App with Data'),
+    html.H1("South Afirca Nowcast"),
     dash_table.DataTable(data=nowcast.to_dict('records'), page_size=10),
-    dcc.Graph(figure = fig)
+    html.Hr(),
+    html.Div(children='All Nowcasts'),
+    dcc.Graph(figure = fig),
+    dcc.Graph(figure = tot_news_fig)
     # px.line(x=nowcast.index, y=nowcast.RGDP, title="Nowcast of Real GDP", 
     #    labels = dict(x ="Quarter", y ="RGDP Logdiff")).update_traces(hovertemplate=None).update_layout(hovermode="x")
 ])
@@ -53,3 +81,5 @@ app.layout = html.Div([
 if __name__ == '__main__':
     app.run_server(debug=True)
 # 
+
+# %%
