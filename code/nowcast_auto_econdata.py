@@ -37,7 +37,7 @@ def load_vintage(path):
                 data = data, data_logdiff = data_logdiff, gdp = gdp, gdp_logdiff = gdp_logdiff)
 
 # %%
-vintages = os.listdir("../vintages")
+vintages = os.listdir("vintages")
 # %%
 vintage_dates = {x: datetime.strptime(x[22:32], "%d_%m_%Y") for x in vintages}
 # %%
@@ -52,14 +52,14 @@ def removekey(d, key):
 previous_vintage = max(removekey(vintage_dates, latest_vintage), key = vintage_dates.get)
 print(previous_vintage)
 # %%
-latest_data = load_vintage("../vintages/" + latest_vintage)
-previous_data = load_vintage("../vintages/" + previous_vintage)
+latest_data = load_vintage("vintages/" + latest_vintage)
+previous_data = load_vintage("vintages/" + previous_vintage)
 
 # %%
 latest_data["series"].groupby('broad_sector', sort=False)["series"].count()
 # %%
-latest_data["gdp"].to_csv("../nowcast/gdp.csv", index_label="quarter")
-latest_data["gdp_logdiff"].to_csv("../nowcast/gdp_logdiff.csv", index_label="quarter")
+latest_data["gdp"].to_csv("nowcast/gdp.csv", index_label="quarter")
+latest_data["gdp_logdiff"].to_csv("nowcast/gdp_logdiff.csv", index_label="quarter")
 # %%
 series = latest_data["series"]
 labels = {k: v for k, v in zip(series.series, series.label)}
@@ -96,11 +96,11 @@ nowcast["quarter"] = str(today_q)
 nowcast = nowcast[["date", "quarter", "UNEMP", "GDP", "RGDP"]]
 print(nowcast)
 # %% 
-nowcast_old = pd.read_csv("../nowcast/nowcast.csv")
+nowcast_old = pd.read_csv("nowcast/nowcast.csv")
 nowcast_all = pd.concat([nowcast_old, nowcast]).reset_index(drop = True)
 nowcast_all.tail()
 # %% 
-nowcast_all.to_csv("../nowcast/nowcast.csv", index = False)
+nowcast_all.to_csv("nowcast/nowcast.csv", index = False)
 # %%
 news = dfm_latest_results.news(dfm_previous_results, 
                                impact_date = str(today_q), 
@@ -118,9 +118,9 @@ news_df["quarter"] = str(today_q)
 news_df["date"] = today
 news_df.head()
 # %%
-news_old = pd.read_csv("../nowcast/news.csv")
+news_old = pd.read_csv("nowcast/news.csv")
 # %%
 news_all = pd.concat([news_old, news_df[news_old.columns]])
 news_all.tail()
 # %%
-news_all.to_csv("../nowcast/news.csv", index = False)
+news_all.to_csv("nowcast/news.csv", index = False)
