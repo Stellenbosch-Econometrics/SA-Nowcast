@@ -9,15 +9,15 @@ from datetime import datetime
 def load_vintage(path):
 
     # Reading 
-    series = pd.read_excel(path, sheet_name="series")
+    series = pd.read_excel(path, sheet_name="series", engine='openpyxl')
     data = pd.read_excel(path, sheet_name="data_m", 
-                        index_col="date", parse_dates=True)
+                        index_col="date", parse_dates=True, engine='openpyxl')
     data_logdiff = pd.read_excel(path, sheet_name="data_logdiff_m",
-                                index_col="date", parse_dates=True)
+                                index_col="date", parse_dates=True, engine='openpyxl')
     gdp = pd.read_excel(path, sheet_name="data_q", 
-                       index_col="date", parse_dates=True)
+                       index_col="date", parse_dates=True, engine='openpyxl')
     gdp_logdiff = pd.read_excel(path, sheet_name="data_logdiff_q", 
-                        index_col="date", parse_dates=True)
+                        index_col="date", parse_dates=True, engine='openpyxl')
     
     # Subsetting 
     series_q = series.loc[series.freq == "Q"]
