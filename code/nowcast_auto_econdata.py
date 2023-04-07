@@ -84,7 +84,7 @@ dfm_latest_results.summary()
 # %%
 today = datetime.date(max(vintage_dates.values())) # datetime.today()
 today_q = pd.PeriodIndex([today], freq = "Q")[0]
-print(f"Today is {str(today)}. We are nowcasting for Quarter {today_q}.")
+print(f"\nToday is {str(today)}. We are nowcasting for Quarter {today_q}.")
 # %% 
 gdp_now = dfm_latest_results.get_prediction(start = today_q)
 print(gdp_now.predicted_mean[["UNEMP", "GDP", "RGDP"]])
@@ -97,7 +97,8 @@ nowcast = nowcast[["date", "quarter", "UNEMP", "GDP", "RGDP"]]
 print(nowcast)
 # %% 
 nowcast_old = pd.read_csv("nowcast/nowcast.csv")
-nowcast_all = pd.concat([nowcast_old, nowcast]).reset_index(drop = True)
+nowcast_all = pd.concat([nowcast_old.loc[pd.to_datetime(nowcast_old.date) < pd.to_datetime(today)], 
+                         nowcast]).reset_index(drop = True)
 nowcast_all.tail()
 # %% 
 nowcast_all.to_csv("nowcast/nowcast.csv", index = False)
@@ -120,7 +121,8 @@ news_df.head()
 # %%
 news_old = pd.read_csv("nowcast/news.csv")
 # %%
-news_all = pd.concat([news_old, news_df[news_old.columns]])
+news_all = pd.concat([news_old.loc[pd.to_datetime(news_old.date) < pd.to_datetime(today)], 
+                      news_df[news_old.columns]])
 news_all.tail()
 # %%
 news_all.to_csv("nowcast/news.csv", index = False)
