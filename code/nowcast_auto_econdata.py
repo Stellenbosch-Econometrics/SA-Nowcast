@@ -58,6 +58,8 @@ previous_data = load_vintage("vintages/" + previous_vintage)
 # %%
 latest_data["series"].groupby('broad_sector', sort=False)["series"].count()
 # %%
+latest_data["series"][["series", "series_orig", "label", "freq", "unit", "seas_adj", "broad_sector", "topic", 
+    "code_src", "comment"]].to_csv("nowcast/series.csv", index=False)
 latest_data["gdp"].to_csv("nowcast/gdp.csv", index_label="quarter")
 latest_data["gdp_logdiff"].to_csv("nowcast/gdp_logdiff.csv", index_label="quarter")
 # %%
