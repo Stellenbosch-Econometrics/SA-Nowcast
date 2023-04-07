@@ -20,10 +20,10 @@ jobs:
       - name: Install Dependencies
         run: |
           options(repos = c(CRAN = "https://cloud.r-project.org"))
-          install.packages("fastverse")
+          install.packages(c("fastverse", "DBI", "RMySQL", "writexl"))
           install.packages("https://www.dropbox.com/s/jpjitlb1njisdfq/samadb_0.2.2.9000.tar.gz?dl=1", repos = NULL, type = "source")
           library(fastverse)
-          fastverse_extend(samadb, seastests, seasonal, tseries, tsbox, xts, writexl, install = TRUE) 
+          fastverse_extend(samadb, seastests, seasonal, tseries, tsbox, xts, install = TRUE) 
         shell: Rscript {0}
       - name: Generate Vintage
         run: Rscript ./code/nowcast_data_econdata_clean.R
