@@ -2,7 +2,9 @@
 # Nowcasting Data EconData Clean
 #######################################
 
-options(repos = c(CRAN = "https://cran.rstudio.com/"), fastverse.install = TRUE)
+install.packages("https://www.dropbox.com/s/jpjitlb1njisdfq/samadb_0.2.2.9000.tar.gz?dl=1", 
+                 repos = NULL, type = "source")
+options(repos = c(CRAN = "https://cloud.r-project.org"), fastverse.install = TRUE)
 library(fastverse)
 fastverse_extend(samadb, seastests, seasonal, tseries, tsbox, xts, writexl, install = TRUE)
 
@@ -42,78 +44,78 @@ adjust_negative <- function(x) if(any((min <- fmin(x)) <= 0)) x %r+% iif(min <= 
 econdata_monthly <- list(
   Real = list(
     Production = list( # Multiple R-squared:  0.3613
-      KBP7085N = c("MAN001_I_S_V11", "MAN001_S_S_V11"),  # Total Manufacturing (Business cycles + Rand)
-      KBP7062N = c("MIN001_I_S_V11", "MIN001_S_S_V11"),  # Total Mining Production, Seas. Adj.
-      KBP7068N = c("ELE002_I_S_V10", "ELE001_S_S_V10")   # Electricity Generation and availability for distr. in SA # ELE003_S_N 
+      KBP7085N = c("MAN001_I_S", "MAN001_S_S"),  # Total Manufacturing (Business cycles + Rand)
+      KBP7062N = c("MIN001_I_S", "MIN001_S_S"),  # Total Mining Production, Seas. Adj.
+      KBP7068N = c("ELE002_I_S", "ELE001_S_S")   # Electricity Generation and availability for distr. in SA # ELE003_S_N 
     ),
     Sales = list( # Multiple R-squared:  0.1832
-      KBP7067N = c("MTS003_S_V11", "MTS005_N_V11"),      # Total motor trade and new vehicle sales (replaces Number of vehicles sold, Seas Adj. Index)
-      KBP7086T = .c(RET008_I_S_V11, RET008_S_S_V11),     # Retail Sales 
-      KBP7087T = .c(WHO001_I_S_V11, WHO001_S_S_V11)      # Wholesale Sales
+      KBP7067N = c("MTS003_S", "MTS005_N"),      # Total motor trade and new vehicle sales (replaces Number of vehicles sold, Seas Adj. Index)
+      KBP7086T = .c(RET008_I_S, RET008_S_S),     # Retail Sales 
+      KBP7087T = .c(WHO001_I_S, WHO001_S_S)      # Wholesale Sales
     ),
     Prices = list( # Multiple R-squared:  0.1085
-      KBP7155N = c("CPI60001_V22", "CPI1000_M_N_V10"),   # CPI Headline
-      KBP7198M = c("PPI001_V11", "PPI027_V11", "PPI028_V11", "PPI041_V11") # Producer prices. Replaced with total, final manufactures, petrol and motor vehicles 
+      KBP7155N = c("CPI60001", "CPI1000_M_N"),   # CPI Headline
+      KBP7198M = c("PPI001", "PPI027", "PPI028", "PPI041") # Producer prices. Replaced with total, final manufactures, petrol and motor vehicles 
     ),
     Tourism = list( # Multiple R-squared:  0.8654
-      MIGRATION_V10 = .c(MIG001_A_N0_TA_V10, MIG001_A_A0_TA_V10, MIG011_N_A0_TX_V10, MIG011_N_N0_TX_V10),  # Total + Total Air + Total overnight tourists + Air
-      TOURIST_ACCOMMODATION_V10 = .c(TOU036_S_V10, TOU006_S_V10, TOU011_S_V10)         # Total income, Stay Units Nights Sold and Occupancy rate
+      MIGRATION = .c(MIG001_A_N0_TA, MIG001_A_A0_TA, MIG011_N_A0_TX, MIG011_N_N0_TX),  # Total + Total Air + Total overnight tourists + Air
+      TOURIST_ACCOMMODATION = .c(TOU036_S, TOU006_S, TOU011_S)         # Total income, Stay Units Nights Sold and Occupancy rate
     ),
     `Other Real` = list( # Multiple R-squared:  0.4357
-      KBP7090N = "DIFN003_M_S_V10", # Leading Indicator
-      LAND_TRANSPORT_V10 = .c(LAN001_S_V10, LAN002_S_V10, LAN018_S_V10, LAN019_S_V10) # Not really very current information...
+      KBP7090N = "DIFN003_M_S", # Leading Indicator
+      LAND_TRANSPORT = .c(LAN001_S, LAN002_S, LAN018_S, LAN019_S) # Not really very current information...
     )
   ),
   Financial = list( # Multiple R-squared:  0.005111
     `Money and Credit` = list(
-      FINANCIAL_SECTOR_V10 = "MON0088_M_V10", # M0 
-      KBP1374M = "MON0300_M_V10",             # M3
-      KBP1347M = "MON0023_M_V10",             # PSC
-      KBP1367M = "MON0191_M_V10"              # Credit to the Government 
+      FINANCIAL_SECTOR = "MON0088_M", # M0 
+      KBP1374M = "MON0300_M",             # M3
+      KBP1347M = "MON0023_M",             # PSC
+      KBP1367M = "MON0191_M"              # Credit to the Government 
     ),
     `Other Fiancial` = list( # Multiple R-squared:  0.01558
-      FINANCIAL_SECTOR_V10 = "MON0263_M_V10", # NFA
-      LIQUIDATIONS_V10 = "LIQ002_A_L_A_N_V10" # Total Liquidations and Insolvencies (could ad more, any signal value??)
+      FINANCIAL_SECTOR = "MON0263_M", # NFA
+      LIQUIDATIONS = "LIQ002_A_L_A_N" # Total Liquidations and Insolvencies (could ad more, any signal value??)
     )
   ),
   External = list(
     Trade = list( # Multiple R-squared:  0.2809
-      EXTERNAL_SECTOR_V10 = .c(CURX600_M_V10, CURM600_M_V10) # Exports and Imports
+      EXTERNAL_SECTOR = .c(CURX600_M, CURM600_M) # Exports and Imports
     ),
     `Exchange Rates` = list( # Multiple R-squared:  0.003367
-      KBP5339M = "BOP5329_M_V10",   # Rand <-> USD Exchange Rate
-      KBP5393M = "BOP5393_M_V10"    # NEER
+      KBP5339M = "BOP5329_M",   # Rand <-> USD Exchange Rate
+      KBP5393M = "BOP5393_M"    # NEER
     ),
     Reserves = list( # Multiple R-squared:  0.02715
-      KBP1021M = "BOP5806_M_V10",     # Total reserves
-      EXTERNAL_SECTOR_V10 = "BOP5272_M_V10" # Foreign currency reserves
+      KBP1021M = "BOP5806_M",     # Total reserves
+      EXTERNAL_SECTOR = "BOP5272_M" # Foreign currency reserves
     )
   ),
   Fiscal = list(
     `Cash Flow` = list( # Multiple R-squared:  0.8279
-        KBP4597M = "NGFC020_M_V10",   # Total Revenue (Replaced with Cash Flow Revenue)
-        KBP4601M = "NGFC040_M_V10",   # Total Expenditure (Replaced with Cash Flow Expenditure)
-        KBP4050M = "NGFC050_M_V10"    # Cash Flow Balance 
+        KBP4597M = "NGFC020_M",   # Total Revenue (Replaced with Cash Flow Revenue)
+        KBP4601M = "NGFC040_M",   # Total Expenditure (Replaced with Cash Flow Expenditure)
+        KBP4050M = "NGFC050_M"    # Cash Flow Balance 
     ),
     Financing = list( # Multiple R-squared:  0.01947     
-        KBP4022M = "NGFC102_M_V10",   # Financing: Domestic Government Bonds
-        KBP4026M = "NGFC103_M_V10",   # Financing: Foreign Bonds and Loans
-        KBP4023M = "NGFC101_M_V10",   # Financing: Treasury Bills and Short-Term Loans
-        KBP4003M = "NGFC006_M_V10",   # Financing: Change in Cash Balances
-        KBP4030M = "NGFC100_M_V10"    # Total financing of national government 
+        KBP4022M = "NGFC102_M",   # Financing: Domestic Government Bonds
+        KBP4026M = "NGFC103_M",   # Financing: Foreign Bonds and Loans
+        KBP4023M = "NGFC101_M",   # Financing: Treasury Bills and Short-Term Loans
+        KBP4003M = "NGFC006_M",   # Financing: Change in Cash Balances
+        KBP4030M = "NGFC100_M"    # Total financing of national government 
     ),
     Debt = list( # Multiple R-squared:  0.005562
-        KBP4114M = "NGD1213_M_V10",   # Total loan debt of national government: Total gross loan debt
-        KBP4105M = "NGD1209_M_V10",   # Total loan debt of national government: Total domestic debt (replaced with marketable debt)
-        KBP4108M = "NGD7900_M_V10",   # Total loan debt of national government: Total foreign debt
-        FISCAL_SECTOR_V10 = "NGD4500_M_V10"  # Domestic non-marketable debt
+        KBP4114M = "NGD1213_M",   # Total loan debt of national government: Total gross loan debt
+        KBP4105M = "NGD1209_M",   # Total loan debt of national government: Total domestic debt (replaced with marketable debt)
+        KBP4108M = "NGD7900_M",   # Total loan debt of national government: Total foreign debt
+        FISCAL_SECTOR = "NGD4500_M"  # Domestic non-marketable debt
     )
   )
 )
 
 # Note: these series are renamed, so the that DFM models reading the excel file continue to work, even if we change the data source
-econdata_quarterly <- list(Real = list(`Other Real`= list(BUSINESS_CYCLES_V10 = c(UNEMP = "LABT079_Q_S_V10")), 
-                                        Production = list(NATL_ACC_V14 = c(GDP = "KBP6006_N_S_V14", RGDP = "KBP6006_R_S_V14")))) # KBP6006_R_N_V14,               
+econdata_quarterly <- list(Real = list(`Other Real`= list(BUSINESS_CYCLES = c(UNEMP = "LABT079_Q_S")), 
+                                        Production = list(NATL_ACC = c(GDP = "KBP6006_N_S", RGDP = "KBP6006_R_S")))) # KBP6006_R_N,               
 
 #
 ### Creating Nowcasting Dataset ----------------------------------------------------------------------------------------------
