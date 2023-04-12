@@ -3,6 +3,8 @@
 from dash import Dash, html, dash_table, dcc, callback, Output, Input
 import plotly.express as px
 import plotly.graph_objects as go
+# %%
+import dash_bootstrap_components as dbc
 
 # %% 
 import pandas as pd
@@ -37,17 +39,31 @@ news_tot.head()
 app = Dash(__name__)
 
 
-app.layout = html.Div([
+app.layout = dbc.Container([
     # html.Div(children='My First App with Data'),
     html.H1("South Africa Nowcast"),
     # dash_table.DataTable(data=nowcast.to_dict('records'), page_size=10),
     html.Hr(),
-    dcc.RadioItems(options=['RGDP', 'GDP', 'UNEMP'], value='RGDP', id='nc-variable'),
+    dbc.Row([
+        dcc.RadioItems(options=['RGDP', 'GDP', 'UNEMP'], value='RGDP', id='nc-variable'),
+    ]),
     html.Div(children='All Nowcasts'),
-    dcc.Graph(figure = {}, id='nowcast-qx'),
-    dash_table.DataTable(data = None, page_size=10, id='nowcast-qx-news'),
-    dcc.Graph(figure = {}, id='all-nowcasts-ts'),
-    dcc.Graph(figure = {}, id='all-nowcasts-news')
+    dbc.Row([
+        dbc.Col([
+            dcc.Graph(figure = {}, id='nowcast-qx')
+        ], width=6),
+        dbc.Col([
+            dash_table.DataTable(data = None, page_size=10, id='nowcast-qx-news')
+        ], width=6)
+    ]),
+    dbc.Row([
+        dbc.Col([
+            dcc.Graph(figure = {}, id='all-nowcasts-ts')
+        ], width=6),
+        dbc.Col([
+            dcc.Graph(figure = {}, id='all-nowcasts-news')
+        ], width=6)
+    ])
     # px.line(x=nowcast.index, y=nowcast.RGDP, title="Nowcast of Real GDP", 
     #    labels = dict(x ="Quarter", y ="RGDP Logdiff")).update_traces(hovertemplate=None).update_layout(hovermode="x")
 ])
@@ -108,7 +124,9 @@ def update_graphs(var):
     fig_qx.update_traces(hovertemplate=None)
 
     news_latest_quarter_dict = news_qx[["date", "update date", "series", "label", "observed", "forecast (prev)", 
-                                        "news", "weight", "impact", "broad_sector", "topic"]].to_dict('records')
+                                        "news", "weight", "impact", "broad_sector", "topic"]]
+    news_latest_quarter_dict[["observed", "forecast (prev)", "news", "weight", "impact"]] = news_latest_quarter_dict[["observed", "forecast (prev)", "news", "weight", "impact"]].transform(lambda x: x.round(3))
+    news_latest_quarter_dict = news_latest_quarter_dict.to_dict('records')
     return fig, tot_news_fig, fig_qx, news_latest_quarter_dict
 
 
