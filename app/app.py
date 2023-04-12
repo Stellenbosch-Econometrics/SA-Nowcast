@@ -52,7 +52,7 @@ app.layout = html.Div([
     #    labels = dict(x ="Quarter", y ="RGDP Logdiff")).update_traces(hovertemplate=None).update_layout(hovermode="x")
 ])
 
-@app.callback(
+@callback(
     Output('all-nowcasts-ts', 'figure'),
     Output('all-nowcasts-news', 'figure'),
     Output('nowcast-qx', 'figure'),
@@ -92,8 +92,8 @@ def update_graphs(var):
     ## Nowcast for latest quarter
     q = nowcast.quarter.max()
     nowcast_latest_quarter = nowcast.loc[nowcast.quarter == q]
-    news_latest_quarter = news.loc[(news.quarter == q) & (news["impacted variable"] == var)] \
-        .groupby(["date", "sector_topic"]).agg({"impact": "sum"}).reset_index()
+    news_qx = news.loc[(news.quarter == q) & (news["impacted variable"] == var)]
+    news_latest_quarter = news_qx.groupby(["date", "sector_topic"]).agg({"impact": "sum"}).reset_index()
     # news_latest_quarter.impact = news_latest_quarter.impact / 10
     fig_qx = px.bar(news_latest_quarter, x="date", y="impact", color="sector_topic")
     fig_qx.add_trace(go.Scatter(x=nowcast_latest_quarter.date, y=nowcast_latest_quarter[var], 
@@ -107,7 +107,8 @@ def update_graphs(var):
     fig_qx.update_yaxes(hoverformat=".2f")
     fig_qx.update_traces(hovertemplate=None)
 
-    news_latest_quarter_dict = news_latest_quarter.to_dict('records')
+    news_latest_quarter_dict = news_qx[["date", "update date", "series", "label", "observed", "forecast (prev)", 
+                                        "news", "weight", "impact", "broad_sector", "topic"]].to_dict('records')
     return fig, tot_news_fig, fig_qx, news_latest_quarter_dict
 
 
