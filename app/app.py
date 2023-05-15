@@ -68,7 +68,7 @@ app.layout = dbc.Container([
         dbc.Col([
             html.H6("Display the News for a Specific Nowcast"),
             # make a select input for the vinage of the nowcast
-            dcc.Dropdown(options=nowcast_dates, value = max(nowcast.date), id='nc-date', 
+            dcc.Dropdown(options=nowcast_dates, value = nowcast.date[-1], id='nc-date', 
                          style={"margin-bottom": "10px"}),
             dash_table.DataTable(data = None, page_size=10, id='nowcast-qx-news', 
                                  style_table={'overflowX': 'scroll'})
