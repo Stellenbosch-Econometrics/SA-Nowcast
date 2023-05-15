@@ -17,6 +17,10 @@ series = pd.read_csv("https://raw.githubusercontent.com/Stellenbosch-Econometric
 news = news.merge(series, 
                   left_on = "updated variable", 
                   right_on = "series", how = "left")
+# format this to month-day
+nowcast_dates = dict(zip(nowcast.date, pd.to_datetime(nowcast.date).dt.strftime("%b-%d")))
+
+
 
 # %%
 nowcast_final = nowcast.copy()
@@ -36,46 +40,65 @@ news_tot.head()
 
 
 # %% 
-app = Dash(__name__)
+app = Dash(__name__, external_stylesheets=[dbc.themes.CYBORG]) # QUARTZ
 
 
 app.layout = dbc.Container([
     # html.Div(children='My First App with Data'),
-    html.H1("South Africa Nowcast"),
+    html.Br(),
+    html.H3("South Africa Nowcast"),
     # dash_table.DataTable(data=nowcast.to_dict('records'), page_size=10),
     html.Hr(),
-    dbc.Row([
-        dcc.RadioItems(options=['RGDP', 'GDP', 'UNEMP'], value='RGDP', id='nc-variable'),
+    html.Div([
+        dbc.Row([
+            dcc.RadioItems(options=[{'label': 'Real GDP', 'value': 'RGDP'}, 
+                                    {'label': 'Nominal GDP', 'value': 'GDP'}, 
+                                    {'label': 'Unemployment', 'value': 'UNEMP'}], 
+                                    value='RGDP', id='nc-variable', 
+                           inline=True, inputStyle={"margin-right": "15px", "margin-left": "30px"}),
+        ]),
     ]),
-    html.Div(children='All Nowcasts'),
+    # html.Div(children='All Nowcasts'),
+    html.Hr(),
+    html.Div([
     dbc.Row([
         dbc.Col([
             dcc.Graph(figure = {}, id='nowcast-qx')
         ], width=6),
         dbc.Col([
-            dash_table.DataTable(data = None, page_size=10, id='nowcast-qx-news')
+            html.H6("Display the News for a Specific Nowcast"),
+            # make a select input for the vinage of the nowcast
+            dcc.Dropdown(options=nowcast_dates, value = max(nowcast.date), id='nc-date', 
+                         style={"margin-bottom": "10px"}),
+            dash_table.DataTable(data = None, page_size=10, id='nowcast-qx-news', 
+                                 style_table={'overflowX': 'scroll'})
         ], width=6)
     ]),
+    html.Hr(),
+    html.H5("All Nowcasts and News Releases"),
+    html.Hr(),
     dbc.Row([
         dbc.Col([
             dcc.Graph(figure = {}, id='all-nowcasts-ts')
         ], width=6),
         dbc.Col([
             dcc.Graph(figure = {}, id='all-nowcasts-news')
-        ], width=6)
+        ], width=6),
+    ])
     ])
     # px.line(x=nowcast.index, y=nowcast.RGDP, title="Nowcast of Real GDP", 
     #    labels = dict(x ="Quarter", y ="RGDP Logdiff")).update_traces(hovertemplate=None).update_layout(hovermode="x")
-])
+], style={'max-width': '90%', 'margin': 'auto'})
 
 @callback(
     Output('all-nowcasts-ts', 'figure'),
     Output('all-nowcasts-news', 'figure'),
     Output('nowcast-qx', 'figure'),
     Output('nowcast-qx-news', 'data'),
-    Input('nc-variable', 'value')
+    Input('nc-variable', 'value'),
+    Input('nc-date', 'value')
 )
-def update_graphs(var):
+def update_graphs(var, date):
     ## Time series plot of all nowcasts
     fig = go.Figure()
     fig.add_trace(go.Scatter(x=nowcast_final.quarter, y=nowcast_final[var], 
@@ -123,9 +146,10 @@ def update_graphs(var):
     fig_qx.update_yaxes(hoverformat=".2f")
     fig_qx.update_traces(hovertemplate=None)
 
-    news_latest_quarter_dict = news_qx[["date", "update date", "series", "label", "observed", "forecast (prev)", 
+    news_latest_quarter_dict = news_qx[["series", "label", "observed", "forecast (prev)", # "date", "update date",
                                         "news", "weight", "impact", "broad_sector", "topic"]]
     news_latest_quarter_dict[["observed", "forecast (prev)", "news", "weight", "impact"]] = news_latest_quarter_dict[["observed", "forecast (prev)", "news", "weight", "impact"]].transform(lambda x: x.round(3))
+    news_latest_quarter_dict = news_latest_quarter_dict.loc[news_qx.date == date]
     news_latest_quarter_dict = news_latest_quarter_dict.to_dict('records')
     return fig, tot_news_fig, fig_qx, news_latest_quarter_dict
 
