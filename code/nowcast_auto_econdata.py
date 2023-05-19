@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 from statsmodels.tsa.api import DynamicFactorMQ
 from datetime import datetime
-
+print("Loaded Packages Successfully")
 # %%
 def load_vintage(path):
 
@@ -71,9 +71,10 @@ print(f"\nToday is {str(today)}. We are nowcasting for Quarter {today_q}. This i
 first_data = load_vintage("vintages/" + first_vintage)
 previous_data = load_vintage("vintages/" + previous_vintage) if previous_vintage != first_vintage else first_data
 latest_data = load_vintage("vintages/" + latest_vintage) if latest_vintage != first_vintage else first_data
+print("loaded vintages successfully")
 # %%
 # Print series count by broad sector (first vintage this quarter)
-first_data["series"].groupby('broad_sector', sort=False)["series"].count()
+print(first_data["series"].groupby('broad_sector', sort=False)["series"].count())
 # %%
 # Saving series csv (first vintage this quarter): updates to the model only possibly in the next quarter
 first_data["series"][["series", "series_orig", "label", "freq", "unit", "seas_adj", "broad_sector", "topic", 
@@ -95,6 +96,7 @@ dfm_first = DynamicFactorMQ(endog=first_data["data_logdiff"],
                             factor_multiplicities=dict(Global = 2, Real = 2, Financial = 1, Fiscal = 2, External = 2), 
                             factor_orders=2)
 dfm_first_results = dfm_first.fit(disp=10)
+print("fitted dfm successfully")
 # %% 
 # Show a summary of the fit on the first vintage
 # dfm_first_results.summary()
@@ -107,6 +109,7 @@ dfm_previous_results = dfm_first_results.apply(endog = previous_data["data_logdi
 dfm_latest_results = dfm_first_results.apply(endog = latest_data["data_logdiff"], 
                                              endog_quarterly=latest_data["gdp_logdiff"][["UNEMP", "GDP", "RGDP"]], 
                                              refit = True, retain_standardization = True) if latest_vintage != first_vintage else dfm_first_results
+print("applied dfm to other vintages successfully")
 # %% 
 # Show a summary of the fit on the latest vintage
 # dfm_latest_results.summary()
@@ -149,7 +152,7 @@ news = dfm_latest_results.news(dfm_previous_results,
                                comparison_type = "previous")
 # %%
 # Summarizing the news
-news.summary(float_format='%.6f')
+print(news.summary(float_format='%.6f'))
 # %%
 # Generating data frame from the news
 news_df = news.details_by_impact.reset_index() 
@@ -162,7 +165,7 @@ news_df.head()
 news_old = pd.read_csv("nowcast/news.csv")
 news_all = pd.concat([news_old.loc[pd.to_datetime(news_old.date) < pd.to_datetime(today)], 
                       news_df[news_old.columns]])
-news_all.tail()
+print(news_all.tail())
 # %%
 # Saving the updated news csv
 news_all.to_csv("nowcast/news.csv", index = False)
