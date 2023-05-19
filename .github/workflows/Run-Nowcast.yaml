@@ -13,7 +13,7 @@ on:
 
 jobs:
   RunSANowcast: 
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
       - name: checkout repo content
         uses: actions/checkout@v3 # checkout the repository content
