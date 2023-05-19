@@ -1,0 +1,99 @@
+
+.custom-tabs-container {
+    width: 60%;
+    background-color: #060606;
+}
+
+#select-var-block  > * {
+    display: inline-block;
+}
+ 
+
+/* .custom-tabs {
+    border-top-left-radius: 3px;
+    background-color: #060606;
+    padding: 0px 24px;
+    border-bottom: 1px solid #d6d6d6;
+} */
+
+.custom-tab {
+    color:#586069;
+    /* border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    border-top: 3px solid transparent !important;
+    border-left: 0px !important;
+    border-right: 0px !important;
+    border-bottom: 0px !important; */
+    background-color: #060606;
+    /* padding: 12px !important;
+    font-family: "system-ui";
+    display: flex !important;
+    align-items: center;
+    justify-content: center; */
+}
+/* .custom-tab--selected {
+    color: black;
+    background-color: #060606;
+    box-shadow: 1px 1px 0px white;
+    border-left: 1px solid lightgrey !important;
+    border-right: 1px solid lightgrey !important;
+    border-top: 3px solid #e36209 !important;
+} */
+
+
+/* .tab, .tab:hover, .tab--selected {
+    overflow: hidden;
+    /*border: 1px solid #ccc;*/
+    /* background-color: #060606;
+    width: 30%; */
+    /* height: 30px; 3vh
+    padding: 0%; */
+    /* font-weight: bold;
+    line-height: 60px; */
+/* }  */
+
+
+/*
+, # 'background-color': '#060606', 'width': '20%', 'height': '30px', 
+              # 'border-top': '0px !important', 'border-bottom': '0px !important'}),
+
+              */
+
+/*
+body {
+    font-family: sans-serif;
+}
+h1, h2, h3, h4, h5, h6 {
+    color: hotpink
+}
+
+
+
+.app-header {
+    height: 60px;
+    line-height: 60px;
+    border-bottom: thin lightgrey solid;
+}
+
+.app-header .app-header--title {
+    font-size: 22px;
+    padding-left: 5px;
+}
+
+*/
+/* Set all fonts to Helvetica 
+* {
+    font-family: Helvetica;
+}
+*/
+
+/* set dark background and white text 
+body {
+    background-color: #333;
+    color: #fff;
+}
+
+.js-plotly-plot {
+    width: 50%;
+}
+*/
