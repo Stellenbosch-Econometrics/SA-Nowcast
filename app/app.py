@@ -36,15 +36,14 @@ nowcast_other = nowcast.drop(index = final_ids)
 
 # %% 
 news["sector_topic"] = news.broad_sector + ": " + news.topic
-# News digest
-news_tot = news.groupby(["impacted variable", "sector_topic", "broad_sector", "topic"]) \
-               .agg({"weight": "mean", "impact": "mean"}).reset_index() 
-news_tot["abs_impact"] = news_tot.impact.abs() # * 100
-news_tot.head()
+
 
 
 # %% 
-app = Dash(__name__, external_stylesheets=[dbc.themes.CYBORG]) # QUARTZ
+# external_stylesheets = ['https://raw.githubusercontent.com/plotly/dash-app-stylesheets/master/dash-docs-base.css']
+# external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
+# external_stylesheets = ['https://raw.githubusercontent.com/tcbegley/dash-bootstrap-css/main/dist/cyborg/bootstrap.css']
+app = Dash(__name__, external_stylesheets=[dbc.themes.DARKLY]) #[dbc.themes.CYBORG]) #  # QUARTZ
 
 
 app.layout = dbc.Container([
@@ -69,6 +68,7 @@ app.layout = dbc.Container([
         # value='tab-2',
         parent_className='custom-tabs',
         className='custom-tabs-container',
+        # className="dash-bootstrap",
         children=[
         dcc.Tab(label='Nowcast Current Quarter', children=[
             # dash_table.DataTable(data=nowcast.to_dict('records'), page_size=10),
@@ -110,14 +110,23 @@ app.layout = dbc.Container([
                 html.H5("All Nowcasts and News Releases"),
                 html.Hr(),
                 # TODO: replace with Date selector
-                dcc.RangeSlider(
-                    min=0,
-                    max=len(all_nowcast_dates)-1,
-                    step=None,
-                    marks= dict(zip(range(len(all_nowcast_dates)), 
-                                pd.to_datetime(nowcast.date).dt.strftime("%b-%d %Y"))) #,
-                    # value=[all_nowcast_dates[0], all_nowcast_dates[-1]]
-                ),
+                html.Div(
+                dcc.DatePickerRange(
+                    id='nowcasts-date-picker-range',
+                    min_date_allowed = all_nowcast_dates[0],
+                    start_date = all_nowcast_dates[0],
+                    max_date_allowed = all_nowcast_dates[-1],
+                    end_date = all_nowcast_dates[-1],
+                    style={"margin-bottom": "10px"}
+                ), className="dash-bootstrap"),
+                # dcc.RangeSlider(
+                #     min=0,
+                #     max=len(all_nowcast_dates)-1,
+                #     step=None,
+                #     marks= dict(zip(range(len(all_nowcast_dates)), 
+                #                 pd.to_datetime(nowcast.date).dt.strftime("%b-%d %Y"))) #,
+                #     # value=[all_nowcast_dates[0], all_nowcast_dates[-1]]
+                # ),
                 dbc.Row([
                     dbc.Col([
                         dcc.Graph(figure = {}, id='all-nowcasts-ts')
@@ -171,21 +180,30 @@ def update_nccq_graphs(var, date):
 @callback(
     Output('all-nowcasts-ts', 'figure'),
     Output('all-nowcasts-news', 'figure'),
-    Input('nc-variable', 'value')
+    Input('nc-variable', 'value'),
+    Input('nowcasts-date-picker-range', 'start_date'),
+    Input('nowcasts-date-picker-range', 'end_date')
 )
-def update_allnc_graphs(var):
+def update_allnc_graphs(var, start_date, end_date):
+
+    ## Adjusting the date range
+    nowcast_final_range = nowcast_final.loc[(nowcast_final.date >= start_date) & (nowcast_final.date <= end_date)]
+    nowcast_other_range = nowcast_other.loc[(nowcast_other.date >= start_date) & (nowcast_other.date <= end_date)]
+    gdp_dates = gdp_ld.index.to_timestamp()
+    gdp_ld_range = gdp_ld.loc[(gdp_dates >= start_date) & (gdp_dates <= end_date)]
+
     ## Time series plot of all nowcasts
     fig = go.Figure()
-    fig.add_trace(go.Scatter(x=nowcast_final.quarter, y=nowcast_final[var], 
-                            customdata=nowcast_final.date, 
+    fig.add_trace(go.Scatter(x=nowcast_final_range.quarter, y=nowcast_final_range[var], 
+                            customdata=nowcast_final_range.date, 
                             hovertemplate="%{y:.2f} (%{customdata})",
                             mode='lines+markers', name='Latest Nowcast'))
-    fig.add_trace(go.Scatter(x=nowcast_other.quarter, y=nowcast_other[var], 
-                            customdata=nowcast_other.date, 
+    fig.add_trace(go.Scatter(x=nowcast_other_range.quarter, y=nowcast_other_range[var], 
+                            customdata=nowcast_other_range.date, 
                             hovertemplate="%{y:.2f} (%{customdata})",
                             mode='markers', name='Nowcast'))
     # choose last day of quarter as timestamp
-    fig.add_trace(go.Scatter(x=gdp_ld.quarter, y=gdp_ld[var], hovertemplate="%{y:.2f}",
+    fig.add_trace(go.Scatter(x=gdp_ld_range.quarter, y=gdp_ld_range[var], hovertemplate="%{y:.2f}",
                              mode='lines+markers', name='Real GDP Growth')) # gdp_ld.index.to_timestamp(how = "end")
     # Edit the layout
     fig.update_layout(title='All Nowcasts (+ Backtesting 2019Q2-2023Q1)', 
@@ -194,11 +212,16 @@ def update_allnc_graphs(var):
                       hovermode="x", 
                       autosize=False, width=750, height=500, margin=dict(l=20, r=20, t=40, b=20), 
                       template="plotly_dark")
+    
+    # News digest
+    news_tot = news.loc[(news.date >= start_date) & (news.date <= end_date) & (news["impacted variable"] == var)] \
+                .groupby(["sector_topic", "broad_sector", "topic"]) \
+                .agg({"weight": "mean", "impact": "mean"}).reset_index() 
+    news_tot["abs_impact"] = news_tot.impact.abs() # * 100
 
     ## Barcharts of average news impacts
     tot_news_fig = go.Figure()
-    news_tot_var = news_tot.loc[news_tot["impacted variable"] == var]
-    tot_news_fig.add_bar(x=news_tot_var.sector_topic, y=news_tot_var.abs_impact)
+    tot_news_fig.add_bar(x=news_tot.sector_topic, y=news_tot.abs_impact)
     tot_news_fig.update_layout(title='Average Absolute News Impact',      
                     xaxis_title='Date', yaxis_title='Average Absolute Impact',
                     barmode='stack', hovermode="x", autosize=False, width=750, height=500,
