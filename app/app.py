@@ -43,7 +43,7 @@ news["sector_topic"] = news.broad_sector + ": " + news.topic
 # external_stylesheets = ['https://raw.githubusercontent.com/plotly/dash-app-stylesheets/master/dash-docs-base.css']
 # external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 # external_stylesheets = ['https://raw.githubusercontent.com/tcbegley/dash-bootstrap-css/main/dist/cyborg/bootstrap.css']
-app = Dash(__name__, external_stylesheets=[dbc.themes.DARKLY]) #[dbc.themes.CYBORG]) #  # QUARTZ
+app = Dash(__name__, external_stylesheets=[dbc.themes.CYBORG]) #[dbc.themes.CYBORG]) #  # QUARTZ
 
 
 app.layout = dbc.Container([
