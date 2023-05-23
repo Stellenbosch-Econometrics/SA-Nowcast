@@ -1,99 +1,69 @@
 
+.select-var-block  > * {
+    display: inline-block;
+}
+
+/* https://dash.plotly.com/dash-core-components/tabs */ 
+
 .custom-tabs-container {
     width: 60%;
     background-color: #060606;
+    border: 0px;
 }
 
-#select-var-block  > * {
-    display: inline-block;
-}
- 
-
-/* .custom-tabs {
-    border-top-left-radius: 3px;
+#tabs-with-classes > * {
+    color: white;
     background-color: #060606;
-    padding: 0px 24px;
-    border-bottom: 1px solid #d6d6d6;
-} */
-
-.custom-tab {
-    color:#586069;
-    /* border-top-left-radius: 3px;
-    border-top-right-radius: 3px;
-    border-top: 3px solid transparent !important;
+    border-top: 0px !important;
     border-left: 0px !important;
     border-right: 0px !important;
-    border-bottom: 0px !important; */
-    background-color: #060606;
-    /* padding: 12px !important;
-    font-family: "system-ui";
-    display: flex !important;
-    align-items: center;
-    justify-content: center; */
+    padding: 10px;
+
 }
-/* .custom-tab--selected {
-    color: black;
-    background-color: #060606;
-    box-shadow: 1px 1px 0px white;
+
+#tabs-with-classes > *:hover {
+    background-color: #3f3f3f;
+}
+
+#tabs-with-classes > .tab--selected {
+    /* background-color: #3f3f3f; */
     border-left: 1px solid lightgrey !important;
     border-right: 1px solid lightgrey !important;
-    border-top: 3px solid #e36209 !important;
-} */
+    border-top: 2px solid #1975FA !important;
+}
 
+/* https://dash.plotly.com/dash-core-components/datepickerrange */
 
-/* .tab, .tab:hover, .tab--selected {
-    overflow: hidden;
-    /*border: 1px solid #ccc;*/
-    /* background-color: #060606;
-    width: 30%; */
-    /* height: 30px; 3vh
-    padding: 0%; */
-    /* font-weight: bold;
-    line-height: 60px; */
-/* }  */
+.DateRangePickerInput {
+    background-color: #060606;
+    border: 0px;
+    color: white;
+}
 
+.DateRangePickerInput * {
+    color: white;
+    background-color: #060606;
+}
+
+.DateRangePickerInput_arrow_svg {
+    fill: white;
+}
+
+.DateRangePickerInput .DateInput_input__focused {
+    border-bottom: 2px solid #1975FA;
+}
+
+.DateRangePickerInput .CalendarDay__selected, .CalendarDay__selected_span {
+    border: 1px double #1975FA;
+}
+.DateRangePickerInput .CalendarDay__selected:hover, .CalendarDay__selected_span:hover {
+    background: #1975FA;
+    border: 1px double #1975FA;
+}
 
 /*
-, # 'background-color': '#060606', 'width': '20%', 'height': '30px', 
-              # 'border-top': '0px !important', 'border-bottom': '0px !important'}),
-
-              */
-
-/*
-body {
-    font-family: sans-serif;
-}
-h1, h2, h3, h4, h5, h6 {
-    color: hotpink
-}
-
-
-
-.app-header {
-    height: 60px;
-    line-height: 60px;
-    border-bottom: thin lightgrey solid;
-}
-
-.app-header .app-header--title {
-    font-size: 22px;
-    padding-left: 5px;
-}
-
-*/
-/* Set all fonts to Helvetica 
-* {
-    font-family: Helvetica;
+.DayPickerKeyboardShortcuts_buttonReset, .DayPickerKeyboardShortcuts_showSpan, .DayPickerKeyboardShortcuts_showSpan__bottomRight > * {
+    background: #1975FA;
 }
 */
 
-/* set dark background and white text 
-body {
-    background-color: #333;
-    color: #fff;
-}
-
-.js-plotly-plot {
-    width: 50%;
-}
-*/

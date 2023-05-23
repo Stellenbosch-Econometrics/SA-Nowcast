@@ -37,15 +37,21 @@ nowcast_other = nowcast.drop(index = final_ids)
 # %% 
 news["sector_topic"] = news.broad_sector + ": " + news.topic
 
-
-
 # %% 
 # external_stylesheets = ['https://raw.githubusercontent.com/plotly/dash-app-stylesheets/master/dash-docs-base.css']
 # external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 # external_stylesheets = ['https://raw.githubusercontent.com/tcbegley/dash-bootstrap-css/main/dist/cyborg/bootstrap.css']
 app = Dash(__name__, external_stylesheets=[dbc.themes.CYBORG]) #[dbc.themes.CYBORG]) #  # QUARTZ
 
+# # https://dash.plotly.com/dash-daq/darkthemeprovider
+# theme = {
+#     'dark': True,
+#     'detail': '#007439',
+#     'primary': '#00EA64',
+#     'secondary': '#6E6E6E',
+# }
 
+# app.layout = daq.DarkThemeProvider(theme = theme, children = 
 app.layout = dbc.Container([
     # html.Div(children='My First App with Data'),
     html.Br(),
@@ -53,13 +59,13 @@ app.layout = dbc.Container([
     html.Hr(),
     dbc.Row([
         html.Div([
-            html.H6("Select a Variable : "),
+            html.H6("Select a Variable to Nowcast : "),
             dcc.RadioItems(options=[{'label': 'Real GDP', 'value': 'RGDP'}, 
                                 {'label': 'Nominal GDP', 'value': 'GDP'}, 
                                 {'label': 'Unemployment', 'value': 'UNEMP'}], 
                                 value='RGDP', id='nc-variable', 
                     inline=True, inputStyle={"margin-right": "15px", "margin-left": "30px"})
-        ], id = "select-var-block")
+        ], className = "select-var-block")
     ]),
     html.Hr(),
     # Add a navbar with 2 tabs
@@ -110,15 +116,16 @@ app.layout = dbc.Container([
                 html.H5("All Nowcasts and News Releases"),
                 html.Hr(),
                 # TODO: replace with Date selector
-                html.Div(
-                dcc.DatePickerRange(
-                    id='nowcasts-date-picker-range',
-                    min_date_allowed = all_nowcast_dates[0],
-                    start_date = all_nowcast_dates[0],
-                    max_date_allowed = all_nowcast_dates[-1],
-                    end_date = all_nowcast_dates[-1],
-                    style={"margin-bottom": "10px"}
-                ), className="dash-bootstrap"),
+                html.Div([
+                    html.H6("Restrict Nowcasting / News Aggregation Range : "),
+                    dcc.DatePickerRange(
+                        id='nowcasts-date-picker-range',
+                        min_date_allowed = all_nowcast_dates[0],
+                        start_date = all_nowcast_dates[0],
+                        max_date_allowed = all_nowcast_dates[-1],
+                        end_date = all_nowcast_dates[-1],
+                        style={"margin-bottom": "10px", "margin-left": "30px"}
+                    )], className="select-var-block"),
                 # dcc.RangeSlider(
                 #     min=0,
                 #     max=len(all_nowcast_dates)-1,
