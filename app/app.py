@@ -78,13 +78,13 @@ app.layout = dbc.Container([
         children=[
         dcc.Tab(label='Nowcast Current Quarter', children=[
             # dash_table.DataTable(data=nowcast.to_dict('records'), page_size=10),
-            html.Hr(),
+            html.Br(),
             html.H5("Nowcast for Current Quarter"),
             html.Hr(),
             dbc.Row([
                 dcc.Graph(figure = {}, id='nowcast-qx')
             ]),
-            html.Hr(),
+            html.Br(),
             html.H5("News Releases"),
             html.Hr(),
             dbc.Row([
@@ -112,7 +112,7 @@ app.layout = dbc.Container([
             html.Br()
         ]),
         dcc.Tab(label='All Nowcasts', children=[
-                html.Hr(),
+                html.Br(),
                 html.H5("All Nowcasts and News Releases"),
                 html.Hr(),
                 # TODO: replace with Date selector
@@ -144,10 +144,36 @@ app.layout = dbc.Container([
                 ])
         ]),
         dcc.Tab(label='About the Nowcast', children=[
-            html.Hr(),
+            # html.Hr(),
+            html.Br(),
             html.H5("About the Nowcast"),
-            html.P("The South African Nowcast is a project by Stellenbosch University's Department of Economics. The project aims to provide a timely and accurate estimate of the current state of the South African economy. The Nowcast is updated on a monthly basis, and is released on the first business day of the month."),
-            html.P("The Nowcast is based on a dynamic factor model, which is estimated using a large number of economic indicators. The model is estimated using the Kalman filter, which allows for the inclusion of new data as it becomes available. The Nowcast is therefore updated on a monthly basis, and is released on the first business day of the month."),        
+            html.P(["The South Africa Nowcast is a project by Stellenbosch University's Department of Economics, that aims to provide a timely and accurate estimate of the current state of the South African economy. It is updated on a weekly basis and released every Friday. The source code and data is publically available on ", 
+                    html.A("GitHub", href = "https://github.com/Stellenbosch-Econometrics/SA-Nowcast"), "."]),
+            html.P(["The Nowcast is based on a mixed-frequency dynamic factor model following Banbura & Modugno (2014) and Bok et al. (2018) (See ", 
+                    html.A("New York Fed Nowcasting Model", href='https://www.newyorkfed.org/research/policy/nowcast'), ") which is estimated using 54 monthly and 3 quarterly series. The model uses a Kalman filter, which allows for the inclusion of new data as it becomes available. Model-based news is computed as the difference between a new data release and its model-based forecast from the previous period. The impact of this news on the nowcast is given by a model-based weight following Banbura & Modugno (2014). In summary: nowcast revision = weight x news."]),        
+            html.P(["The data for the nowcast is obtained from the South Africa Macroeconomic Database (SAMADB), which is also maintained at the department and updated every week Thursday with the help of ", 
+                   html.A("EconData", href = "https://www.econdata.co.za/"), ". SAMADB is publicly accessible through API packages for ",
+                   html.A("R", href = "https://CRAN.R-project.org/package=samadb"), ", ", 
+                   html.A("Python", href = "https://pypi.org/project/samadb/"), ",  and ", 
+                   html.A("Julia", href = "https://juliahub.com/ui/Search?q=SAMaDB&type=packages"), "."]),
+            html.P(["More information about the database and nowcasting methodology is provided in the accompanying ", 
+                    html.A("presentation slides", href = "https://github.com/Stellenbosch-Econometrics/SA-Nowcast/blob/main/presentation/SAMADB_Nowcasting.pdf"), "."]),
+            html.Br(),
+            html.H5("Authors"), 
+            html.P(["The database and nowcasting model was built by ", 
+                    html.A("Sebastian Krantz", href = "https://github.com/SebKrantz"), 
+                    ". It is generously hosted by ", 
+                    html.A("Codera Analytics", href = "https://codera.co.za/"), 
+                    ", which also maintains ", 
+                    html.A("EconData", href = "https://www.econdata.co.za/"), ". Credit is also due to ", 
+                    html.A("Chad Fulton", href = "https://github.com/ChadFulton"), " who implemented the routines to estimate dynamic factor models for nowcasting in the ",
+                    html.A("statsmodels", href = "https://www.statsmodels.org/dev/statespace.html#dynamic-factor-models"), " Python library."]),
+            html.Br(),
+            html.H5("References"),
+            html.P(["Banbura, M., & Modugno, M. (2014). Maximum likelihood estimation of factor models on datasets with arbitrary pattern of missing data. ",
+                    html.I("Journal of Applied Econometrics, 29"), "(1), 133-160."]),
+            html.P(["Bok, B., Caratelli, D., Giannone, D., Sbordone, A. M., & Tambalotti, A. (2018). Macroeconomic nowcasting and forecasting with big data. ",
+                    html.I("Annual Review of Economics, 10"), ", 615-643."])
         ]),
     ])
 ], style={'max-width': '90%', 'margin': 'auto'})
