@@ -22,7 +22,7 @@
 }
 
 #tabs-with-classes > *:hover {
-    background-color: #3f3f3f;
+    background-color: #272727;
 }
 
 #tabs-with-classes > .tab--selected {
