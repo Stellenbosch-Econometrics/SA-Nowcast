@@ -108,8 +108,8 @@ app.layout = dbc.Container([
                                         'padding-right': '20px'
                                     }
                 )
-            ]),
-            html.Br()
+            ]) #,
+            # html.Br()
         ]),
         dcc.Tab(label='All Nowcasts', children=[
                 html.Br(),
@@ -175,7 +175,9 @@ app.layout = dbc.Container([
             html.P(["Bok, B., Caratelli, D., Giannone, D., Sbordone, A. M., & Tambalotti, A. (2018). Macroeconomic nowcasting and forecasting with big data. ",
                     html.I("Annual Review of Economics, 10"), ", 615-643."])
         ]),
-    ])
+    ]),
+    html.Footer(["© 2023 Sebastian Krantz and Stellenbosch University Department of Economics"], 
+                style={'text-align': 'center', 'margin-top': '30px', 'margin-bottom': '20px', 'color': '#737373'})
 ], style={'max-width': '90%', 'margin': 'auto'})
 
 @callback(
@@ -196,7 +198,7 @@ def update_nccq_graphs(var, date):
     fig_qx.update_layout(title='Nowcast for ' + q,  barmode='stack',    
                         xaxis_title='Date', yaxis_title='Quarterly Log-Differnece Growth Rate (%)',
                         legend_title = "Sector: Topic",
-                        hovermode="x", autosize=False, width=1000, height=500,
+                        hovermode="x", autosize=False, width=1200, height=500,
                         margin=dict(l=20, r=20, t=40, b=20), template="plotly_dark")
     # delete the hover template
     fig_qx.update_yaxes(hoverformat=".2f")
