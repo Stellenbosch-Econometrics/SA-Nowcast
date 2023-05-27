@@ -4,7 +4,7 @@
 
 options(repos = c(CRAN = "https://cloud.r-project.org"))
 if(!requireNamespace("fastverse", quietly = TRUE)) install.packages("fastverse")
-if(!requireNamespace("samadb", quietly = TRUE)) install.packages("https://www.dropbox.com/s/yi6hxvdxfy1vl5c/samadb_0.2.4.tar.gz?dl=1", repos = NULL, type = "source")
+if(!requireNamespace("samadb", quietly = TRUE)) install.packages("samadb")
 library(fastverse)
 fastverse_extend(samadb, seasonal, writexl, install = TRUE) # seastests -> many dependencies, also tsbox, xts, tseries
 
@@ -126,7 +126,10 @@ nc_ind <- c(econdata_monthly, econdata_quarterly) %>%
   unlist2d(c("broad_sector", "topic", "QB"), "series_alt", DT = TRUE) %>%
   ftransform(series = X, QB = NULL, X = NULL)
 
-nc_series = fselect(sm_series(series = nc_ind$series), -topic)[nc_ind, on = "series"]
+nc_series <- fselect(sm_series(series = nc_ind$series, dataset.info = TRUE), -topic)[nc_ind, on = "series"] %>% 
+             ftransform(srcid = NULL, src_dsid = NULL, provider = NULL, access = NULL) %>% 
+             colorder(dsid, dataset)
+
 settransform(nc_series,
    minimal = topic %in% c("Production", "Sales", "Prices", "Tourism", "Other Real", "Trade", "Cash Flow"),
    series_orig = series,
