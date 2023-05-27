@@ -85,7 +85,12 @@ app.layout = dbc.Container([
                 dcc.Graph(figure = {}, id='nowcast-qx')
             ]),
             html.Br(),
-            html.H5("News Releases"),
+            html.Div([
+                html.H5("News Releases ", style={"margin" : "0px", "padding" : "0px"}), 
+                html.Span(" ", style={"width" : "50px", "margin" : "0px", "padding" : "0px"}),
+                html.P("[ Impact  =  News  x  Weight  =  (Release - Forecast)  x  Weight ]", style={"margin" : "0px", "padding" : "0px"})
+            ], className = "select-var-block"),
+            # html.H5("News Releases [Impact = News x Weight = (Release - Forecast) x Weight]"),
             html.Hr(),
             dbc.Row([
                 # # make a select input for the vinage of the nowcast
@@ -203,12 +208,21 @@ def update_nccq_graphs(var, date):
     # delete the hover template
     fig_qx.update_yaxes(hoverformat=".2f")
     fig_qx.update_traces(hovertemplate=None)
-
-    news_latest_quarter_dict = news_qx[["series", "label", "observed", "forecast (prev)", # "date", "update date",
-                                        "news", "weight", "impact", "broad_sector", "topic"]]
-    news_latest_quarter_dict[["observed", "forecast (prev)", "news", "weight", "impact"]] = news_latest_quarter_dict[["observed", "forecast (prev)", "news", "weight", "impact"]].transform(lambda x: x.round(3))
-    news_latest_quarter_dict = news_latest_quarter_dict.loc[news_qx.date == date]
-    news_latest_quarter_dict = news_latest_quarter_dict.to_dict('records')
+    
+    news_labels = {"series" : "Series", 
+                  "dataset" : "Dataset",
+                  "label" : "Label",
+                  "observed" : "Release",
+                  "forecast (prev)" : "Forecast",  # "date", "update date",
+                  "news" : "News",
+                  "weight" : "Weight",
+                  "impact" : "Impact",
+                  "broad_sector" : "Sector",
+                  "topic" : "Topic"}
+    news_vars = list(news_labels.keys())
+    news_latest_quarter_dict = news_qx.loc[news_qx.date == date, news_vars]
+    news_latest_quarter_dict[news_vars[3:8]] = news_latest_quarter_dict[news_vars[3:8]].transform(lambda x: x.round(3))
+    news_latest_quarter_dict = news_latest_quarter_dict.rename(columns=news_labels).to_dict('records')
     return fig_qx, news_latest_quarter_dict
 
 
