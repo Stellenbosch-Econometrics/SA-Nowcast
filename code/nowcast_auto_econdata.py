@@ -77,8 +77,8 @@ print("loaded vintages successfully")
 print(first_data["series"].groupby('broad_sector', sort=False)["series"].count())
 # %%
 # Saving series csv (first vintage this quarter): updates to the model only possibly in the next quarter
-first_data["series"][["series", "series_orig", "label", "freq", "unit", "seas_adj", "broad_sector", "topic", 
-    "code_src", "comment"]].to_csv("nowcast/series.csv", index=False)
+first_data["series"][["series", "series_orig", "dataset", "label", "freq", "unit", "seas_adj", "broad_sector", "topic"]] \
+    .to_csv("nowcast/series.csv", index=False)
 # %% 
 # Saving latest gdp
 latest_data["gdp"].to_csv("nowcast/gdp.csv", index_label="quarter")
