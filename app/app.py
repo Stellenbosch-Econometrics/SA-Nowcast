@@ -120,14 +120,15 @@ app.layout = dbc.Container([
                 html.Br(),
                 html.H5("All Nowcasts and News Releases"),
                 html.Hr(),
-                # TODO: replace with Date selector
                 html.Div([
                     html.H6("Restrict Nowcasting / News Aggregation Range : "),
                     dcc.DatePickerRange(
                         id='nowcasts-date-picker-range',
-                        min_date_allowed = all_nowcast_dates[0],
+                        month_format = 'D MMM YYYY',
+                        display_format='DD/MM/YYYY',
+                        # min_date_allowed = all_nowcast_dates[0],
                         start_date = all_nowcast_dates[0],
-                        max_date_allowed = all_nowcast_dates[-1],
+                        # max_date_allowed = all_nowcast_dates[-1],
                         end_date = all_nowcast_dates[-1],
                         style={"margin-bottom": "10px", "margin-left": "30px"}
                     )], className="select-var-block"),
@@ -203,7 +204,8 @@ def update_nccq_graphs(var, date):
     fig_qx.update_layout(title='Nowcast for ' + q,  barmode='stack',    
                         xaxis_title='Date', yaxis_title='Quarterly Log-Differnece Growth Rate (%)',
                         legend_title = "Sector: Topic",
-                        hovermode="x", autosize=False, width=1200, height=500,
+                        hovermode="x", hoverlabel = dict(namelength = -1), # https://github.com/plotly/plotly.js/issues/460
+                        autosize=False, width=1200, height=500,
                         margin=dict(l=20, r=20, t=40, b=20), template="plotly_dark")
     # delete the hover template
     fig_qx.update_yaxes(hoverformat=".2f")
@@ -241,26 +243,39 @@ def update_allnc_graphs(var, start_date, end_date):
     gdp_dates = gdp_ld.index.to_timestamp()
     gdp_ld_range = gdp_ld.loc[(gdp_dates >= start_date) & (gdp_dates <= end_date)]
 
-    ## Time series plot of all nowcasts
-    fig = go.Figure()
-    fig.add_trace(go.Scatter(x=nowcast_final_range.quarter, y=nowcast_final_range[var], 
-                            customdata=nowcast_final_range.date, 
-                            hovertemplate="%{y:.2f} (%{customdata})",
-                            mode='lines+markers', name='Latest Nowcast'))
+    ## Time series plot of all nowcasts 
+    nowcast_other_range["nc_date"] = nowcast_other_range.date.astype(str) + " : " + nowcast_other_range[var].round(2).astype(str) 
+    nowcast_other_range["nc_date_all"] = nowcast_other_range.groupby("quarter").nc_date.transform(lambda x: "<br>   " + "   <br>   ".join(reversed(x.tolist())))
+
+    fig = go.Figure()   
+
     fig.add_trace(go.Scatter(x=nowcast_other_range.quarter, y=nowcast_other_range[var], 
-                            customdata=nowcast_other_range.date, 
-                            hovertemplate="%{y:.2f} (%{customdata})",
-                            mode='markers', name='Nowcast'))
-    # choose last day of quarter as timestamp
-    fig.add_trace(go.Scatter(x=gdp_ld_range.quarter, y=gdp_ld_range[var], hovertemplate="%{y:.2f}",
-                             mode='lines+markers', name='Real GDP Growth')) # gdp_ld.index.to_timestamp(how = "end")
+                            customdata=nowcast_other_range.nc_date_all, 
+                            # stackgroup = nowcast_other_range.quarter,
+                            hovertemplate= "%{customdata}", # "%{y:.2f} (%{customdata})",
+                            mode='markers', marker=dict(color='red'), name='Older Nowcasts'))
+    
+    fig.add_trace(go.Scatter(x=nowcast_final_range.quarter, y=nowcast_final_range[var], 
+                    customdata=nowcast_final_range.date, 
+                    hovertemplate="<br>   %{customdata} : %{y:.2f}",
+                    mode='lines+markers', marker=dict(color='orange'), name='Latest Nowcast'))
+    
+    fig.add_trace(go.Scatter(x=gdp_ld_range.quarter, y=gdp_ld_range[var], 
+                             hovertemplate="%{y:.2f}", 
+                             mode='lines+markers', name='Outcome'))
+    
     # Edit the layout
     fig.update_layout(title='All Nowcasts (+ Backtesting 2019Q2-2023Q1)', 
                       xaxis_title='Quarter', 
                       yaxis_title='Quarterly Log-Differnece Growth Rate (%)', 
-                      hovermode="x", 
+                      hovermode="x unified", 
+                      # hoverlabel = dict(namelength = 0),
+                      legend_traceorder="reversed",
                       autosize=False, width=750, height=500, margin=dict(l=20, r=20, t=40, b=20), 
                       template="plotly_dark")
+    
+    fig.update_xaxes(categoryorder='array', 
+                     categoryarray=nowcast_final_range.quarter)
     
     # News digest
     news_tot = news.loc[(news.date >= start_date) & (news.date <= end_date) & (news["impacted variable"] == var)] \
