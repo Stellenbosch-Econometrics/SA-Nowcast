@@ -1,5 +1,6 @@
 # %% 
 # Import packages
+from flask import Flask
 from dash import Dash, html, dash_table, dcc, callback, Output, Input
 import plotly.express as px
 import plotly.graph_objects as go
@@ -41,7 +42,8 @@ news["sector_topic"] = news.broad_sector + ": " + news.topic
 # external_stylesheets = ['https://raw.githubusercontent.com/plotly/dash-app-stylesheets/master/dash-docs-base.css']
 # external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 # external_stylesheets = ['https://raw.githubusercontent.com/tcbegley/dash-bootstrap-css/main/dist/cyborg/bootstrap.css']
-app = Dash(__name__, external_stylesheets=[dbc.themes.CYBORG]) #[dbc.themes.CYBORG]) #  # QUARTZ
+server = Flask(__name__)
+app = Dash(server = server, external_stylesheets=[dbc.themes.CYBORG]) #[dbc.themes.CYBORG]) #  # QUARTZ
 
 # # https://dash.plotly.com/dash-daq/darkthemeprovider
 # theme = {
