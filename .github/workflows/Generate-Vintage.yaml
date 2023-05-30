@@ -20,8 +20,7 @@ jobs:
       - name: Install Dependencies
         run: |
           options(repos = c(CRAN = "https://cloud.r-project.org"))
-          install.packages(c("fastverse", "DBI", "RMySQL", "writexl", "seasonal"))
-          install.packages("https://www.dropbox.com/s/j4s98y7wknzcaww/samadb_0.2.5.tar.gz?dl=1", repos = NULL, type = "source")
+          install.packages(c("fastverse", "DBI", "RMySQL", "writexl", "seasonal", "samadb"))
           library(fastverse)
           fastverse_extend(samadb, seasonal, writexl, install = TRUE)
         shell: Rscript {0}
