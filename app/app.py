@@ -165,7 +165,7 @@ app.layout = dbc.Container([
                    html.A("Python", href = "https://pypi.org/project/samadb/"), ",  and ", 
                    html.A("Julia", href = "https://juliahub.com/ui/Search?q=SAMaDB&type=packages"), "."]),
             html.P(["More information about the database and nowcasting methodology is provided in the accompanying ", 
-                    html.A("presentation slides", href = "https://github.com/Stellenbosch-Econometrics/SA-Nowcast/blob/main/presentation/SAMADB_Nowcasting.pdf"), "."]),
+                    html.A("presentation slides", href = "https://raw.githubusercontent.com/Stellenbosch-Econometrics/SA-Nowcast/main/presentation/SAMADB_Nowcasting.pdf"), "."]),
             html.Br(),
             html.H5("Authors"), 
             html.P(["The database and nowcasting model was built by ", 
