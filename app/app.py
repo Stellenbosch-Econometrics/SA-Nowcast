@@ -154,16 +154,17 @@ app.layout = dbc.Container([
         dcc.Tab(label='About the Nowcast', children=[
             # html.Hr(),
             html.Br(),
-            html.H5("About the Nowcast"),
-            html.P(["The South Africa Nowcast is a project by Stellenbosch University's Department of Economics, that aims to provide a timely and accurate estimate of the current state of the South African economy. It is updated on a weekly basis and released every Friday. The source code and data is publically available on ", 
-                    html.A("GitHub", href = "https://github.com/Stellenbosch-Econometrics/SA-Nowcast"), "."]),
-            html.P(["The Nowcast is based on a mixed-frequency dynamic factor model following Banbura & Modugno (2014) and Bok et al. (2018) (See ", 
+            html.H5("About the SA Nowcast"),
+            html.P(["The South Africa Nowcast is a project that aims to provide a timely and accurate estimate of the current state of the South African economy. It is updated on a weekly basis and released every Friday."]),
+            html.P(["The nowcast draws its data from the South Africa Macroeconomic Database (SAMADB) a free analytical macroeconomic database. SAMADB offers over 10 000 time series for South Africa collected from the Quarterly Bulletin, ",
+                    html.A("EconData", href='https://www.econdata.co.za'), ", and STATSSA, with weekly updates (every Thursday). It allows efficient global queries through API packages for ",
+                    html.A("R", href = "https://CRAN.R-project.org/package=samadb"), ", ",
+                    html.A("Python", href = "https://pypi.org/project/samadb/"), ", and ",
+                    html.A("Julia", href = "https://juliahub.com/ui/Search?q=SAMaDB&type=packages"), ", and provides concise and harmonized information about time series attributes and data availability/coverage. By harmonizing time series data and making it broadly accessible in a database, we hope to facilitate macroeconomic research in SA."]),
+            html.P(["The nowcast is based on a mixed-frequency dynamic factor model following Banbura & Modugno (2014) and Bok et al. (2018) (See ", 
                     html.A("New York Fed Nowcasting Model", href='https://www.newyorkfed.org/research/policy/nowcast'), ") which is estimated using 54 monthly and 3 quarterly series. The model uses a Kalman filter, which allows for the inclusion of new data as it becomes available. Model-based news is computed as the difference between a new data release and its model-based forecast from the previous period. The impact of this news on the nowcast is given by a model-based weight following Banbura & Modugno (2014). In summary: nowcast revision = weight x news."]),        
-            html.P(["The data for the nowcast is obtained from the South Africa Macroeconomic Database (SAMADB), which is also maintained at the department and updated every week Thursday with the help of ", 
-                   html.A("EconData", href = "https://www.econdata.co.za/"), ". SAMADB is publicly accessible through API packages for ",
-                   html.A("R", href = "https://CRAN.R-project.org/package=samadb"), ", ", 
-                   html.A("Python", href = "https://pypi.org/project/samadb/"), ",  and ", 
-                   html.A("Julia", href = "https://juliahub.com/ui/Search?q=SAMaDB&type=packages"), "."]),
+             html.P(["The source code and data is publically available on ",
+                     html.A("GitHub", href = "https://github.com/Stellenbosch-Econometrics/SA-Nowcast"), " which includes weekly vintages of the nowcasting dataset available as excel files and all nowcasts and news releases as CSV files."]), 
             html.P(["More information about the database and nowcasting methodology is provided in the accompanying ", 
                     html.A("presentation slides", href = "https://raw.githubusercontent.com/Stellenbosch-Econometrics/SA-Nowcast/main/presentation/SAMADB_Nowcasting.pdf"), "."]),
             html.Br(),
@@ -184,7 +185,7 @@ app.layout = dbc.Container([
                     html.I("Annual Review of Economics, 10"), ", 615-643."])
         ]),
     ]),
-    html.Footer(["© 2023 Sebastian Krantz and Stellenbosch University Department of Economics"], 
+    html.Footer(["© 2023 Sebastian Krantz and Codera Analytics."], 
                 style={'text-align': 'center', 'margin-top': '30px', 'margin-bottom': '20px', 'color': '#737373'})
 ], style={'max-width': '90%', 'margin': 'auto'})
 
