@@ -215,6 +215,7 @@ def update_nccq_graphs(var, date):
     fig_qx.update_yaxes(hoverformat=".2f")
     fig_qx.update_traces(hovertemplate=None)
     
+    # %%
     news_labels = {"series" : "Series", 
                   "dataset" : "Dataset",
                   "label" : "Label",
@@ -225,10 +226,12 @@ def update_nccq_graphs(var, date):
                   "impact" : "Impact",
                   "broad_sector" : "Sector",
                   "topic" : "Topic"}
+    # %%
     news_vars = list(news_labels.keys())
     news_latest_quarter_dict = news_qx.loc[news_qx.date == date, news_vars]
     news_latest_quarter_dict[news_vars[3:8]] = news_latest_quarter_dict[news_vars[3:8]].transform(lambda x: x.round(3))
-    news_latest_quarter_dict = news_latest_quarter_dict.rename(columns=news_labels)[list(news_labels.values())].to_dict('records')
+    news_latest_quarter_dict = news_latest_quarter_dict.rename(columns=news_labels)[
+        ['Series', 'Dataset', 'Label', 'Release', 'Forecast', 'News', 'Weight', 'Impact', 'Sector', 'Topic']].to_dict('records')
     return fig_qx, news_latest_quarter_dict
 
 @callback(
@@ -246,13 +249,13 @@ def update_allnc_graphs(var, start_date, end_date):
     gdp_ld_range = gdp_ld.loc[(gdp_dates >= start_date) & (gdp_dates <= end_date)]
 
     ## Time series plot of all nowcasts 
-    nowcast_other_range["nc_date"] = nowcast_other_range.date.astype(str) + " : " + nowcast_other_range[var].round(2).astype(str) 
+    nowcast_other_range["nc_date"] = nowcast_other_range.date.astype(str) + " : " + ((np.exp(nowcast_other_range[var]/100)**4-1)*100).round(2).astype(str) 
     nowcast_other_range["nc_date_all"] = nowcast_other_range.groupby("quarter").nc_date.transform(lambda x: "<br>   " + "   <br>   ".join(reversed(x.tolist())))
 
     fig = go.Figure()   
 
     fig.add_trace(go.Scatter(x=nowcast_final_range.quarter,
-                             y=(np.exp(nowcast_final_range[var].rolling(4).sum()/100)-1)*100, 
+                             y=(np.exp(nowcast_final_range[var]/100).rolling(4).apply(np.prod, raw = True)-1)*100, 
                              customdata=nowcast_final_range.date, 
                              hovertemplate="<br>   %{customdata} : %{y:.2f}",
                              mode='lines+markers', marker=dict(color='cyan'), name='Nowcast (YoY%)'))
