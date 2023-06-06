@@ -79,39 +79,6 @@ app.layout = dbc.Container([
         className='custom-tabs-container',
         # className="dash-bootstrap",
         children=[
-        dcc.Tab(label='Nowcasts', children=[
-                html.Br(),
-                html.H5("All Nowcasts and News Releases"),
-                html.Hr(),
-                html.Div([
-                    html.H6("Restrict Nowcasting / News Aggregation Range : "),
-                    dcc.DatePickerRange(
-                        id='nowcasts-date-picker-range',
-                        month_format = 'D MMM YYYY',
-                        display_format='DD/MM/YYYY',
-                        # min_date_allowed = all_nowcast_dates[0],
-                        start_date = all_nowcast_dates[0],
-                        # max_date_allowed = all_nowcast_dates[-1],
-                        end_date = all_nowcast_dates[-1],
-                        style={"margin-bottom": "10px", "margin-left": "30px"}
-                    )], className="select-var-block"),
-                # dcc.RangeSlider(
-                #     min=0,
-                #     max=len(all_nowcast_dates)-1,
-                #     step=None,
-                #     marks= dict(zip(range(len(all_nowcast_dates)), 
-                #                 pd.to_datetime(nowcast.date).dt.strftime("%b-%d %Y"))) #,
-                #     # value=[all_nowcast_dates[0], all_nowcast_dates[-1]]
-                # ),
-                dbc.Row([
-                    dbc.Col([
-                        dcc.Graph(figure = {}, id='all-nowcasts-ts')
-                    ], width=6),
-                    dbc.Col([
-                        dcc.Graph(figure = {}, id='all-nowcasts-news')
-                    ], width=6),
-                ])
-        ]),
         dcc.Tab(label='Latest Nowcast Quarter', children=[
             # dash_table.DataTable(data=nowcast.to_dict('records'), page_size=10),
             html.Br(),
@@ -152,6 +119,39 @@ app.layout = dbc.Container([
             ]) #,
             # html.Br()
         ]),
+        dcc.Tab(label='Nowcasts', children=[
+                html.Br(),
+                html.H5("All Nowcasts and News Releases"),
+                html.Hr(),
+                html.Div([
+                    html.H6("Restrict Nowcasting / News Aggregation Range : "),
+                    dcc.DatePickerRange(
+                        id='nowcasts-date-picker-range',
+                        month_format = 'D MMM YYYY',
+                        display_format='DD/MM/YYYY',
+                        # min_date_allowed = all_nowcast_dates[0],
+                        start_date = all_nowcast_dates[0],
+                        # max_date_allowed = all_nowcast_dates[-1],
+                        end_date = all_nowcast_dates[-1],
+                        style={"margin-bottom": "10px", "margin-left": "30px"}
+                    )], className="select-var-block"),
+                # dcc.RangeSlider(
+                #     min=0,
+                #     max=len(all_nowcast_dates)-1,
+                #     step=None,
+                #     marks= dict(zip(range(len(all_nowcast_dates)), 
+                #                 pd.to_datetime(nowcast.date).dt.strftime("%b-%d %Y"))) #,
+                #     # value=[all_nowcast_dates[0], all_nowcast_dates[-1]]
+                # ),
+                dbc.Row([
+                    dbc.Col([
+                        dcc.Graph(figure = {}, id='all-nowcasts-ts')
+                    ], width=6),
+                    dbc.Col([
+                        dcc.Graph(figure = {}, id='all-nowcasts-news')
+                    ], width=6),
+                ])
+        ]),
         dcc.Tab(label='About the Nowcast', children=[
             # html.Hr(),
             html.Br(),
@@ -189,6 +189,47 @@ app.layout = dbc.Container([
     html.Footer(["© 2023 Sebastian Krantz and Codera Analytics"], 
                 style={'text-align': 'center', 'margin-top': '30px', 'margin-bottom': '20px', 'color': '#737373'})
 ], style={'max-width': '90%', 'margin': 'auto'})
+
+@callback(
+    Output('nowcast-qx', 'figure'),
+    Output('nowcast-qx-news', 'data'),
+    Input('nc-variable', 'value'),
+    Input('nc-date', 'value')
+)
+def update_nccq_graphs(var, date):
+    ## Nowcast for latest quarter
+    news_qx = news.loc[(news.quarter == q) & (news["impacted variable"] == var)]
+    news_latest_quarter = news_qx.groupby(["date", "sector_topic"]).agg({"impact": "sum"}).reset_index()
+    # news_latest_quarter.impact = news_latest_quarter.impact / 10
+    fig_qx = px.bar(news_latest_quarter, x="date", y="impact", color="sector_topic")
+    fig_qx.add_trace(go.Scatter(x=nowcast_latest_quarter.date, y=nowcast_latest_quarter[var], 
+                                line=dict(color="white"), mode='lines+markers', name='Nowcast'))
+    # Edit the layout
+    fig_qx.update_layout(title='Nowcast for ' + q,  barmode='stack',    
+                        xaxis_title='Date', yaxis_title='Quarterly Log-Differnece Growth Rate (%)',
+                        legend_title = "Sector: Topic",
+                        hovermode="x", hoverlabel = dict(namelength = -1), # https://github.com/plotly/plotly.js/issues/460
+                        autosize=False, width=1200, height=500,
+                        margin=dict(l=20, r=20, t=40, b=20), template="plotly_dark")
+    # delete the hover template
+    fig_qx.update_yaxes(hoverformat=".2f")
+    fig_qx.update_traces(hovertemplate=None)
+    
+    news_labels = {"series" : "Series", 
+                  "dataset" : "Dataset",
+                  "label" : "Label",
+                  "observed" : "Release",
+                  "forecast (prev)" : "Forecast",  # "date", "update date",
+                  "news" : "News",
+                  "weight" : "Weight",
+                  "impact" : "Impact",
+                  "broad_sector" : "Sector",
+                  "topic" : "Topic"}
+    news_vars = list(news_labels.keys())
+    news_latest_quarter_dict = news_qx.loc[news_qx.date == date, news_vars]
+    news_latest_quarter_dict[news_vars[3:8]] = news_latest_quarter_dict[news_vars[3:8]].transform(lambda x: x.round(3))
+    news_latest_quarter_dict = news_latest_quarter_dict.rename(columns=news_labels)[list(news_labels.values())].to_dict('records')
+    return fig_qx, news_latest_quarter_dict
 
 @callback(
     Output('all-nowcasts-ts', 'figure'),
@@ -232,7 +273,7 @@ def update_allnc_graphs(var, start_date, end_date):
                              mode='lines+markers', marker=dict(color='green'), name='Outcome'))
     
     # Edit the layout
-    fig.update_layout(title='All Nowcasts (+ Backtesting 2019Q2-2022Q4)', 
+    fig.update_layout(title='All Nowcasts (+ Backtesting 2019Q2-2023Q1)', 
                       xaxis_title='Quarter', 
                       yaxis_title='Quarterly Annualised Growth Rate (%)', 
                       hovermode="x unified", 
@@ -258,47 +299,6 @@ def update_allnc_graphs(var, start_date, end_date):
                     barmode='stack', hovermode="x", autosize=False, width=750, height=500,
                     margin=dict(l=20, r=20, t=40, b=20), template="plotly_dark")
     return fig, tot_news_fig
-
-@callback(
-    Output('nowcast-qx', 'figure'),
-    Output('nowcast-qx-news', 'data'),
-    Input('nc-variable', 'value'),
-    Input('nc-date', 'value')
-)
-def update_nccq_graphs(var, date):
-    ## Nowcast for latest quarter
-    news_qx = news.loc[(news.quarter == q) & (news["impacted variable"] == var)]
-    news_latest_quarter = news_qx.groupby(["date", "sector_topic"]).agg({"impact": "sum"}).reset_index()
-    # news_latest_quarter.impact = news_latest_quarter.impact / 10
-    fig_qx = px.bar(news_latest_quarter, x="date", y="impact", color="sector_topic")
-    fig_qx.add_trace(go.Scatter(x=nowcast_latest_quarter.date, y=nowcast_latest_quarter[var], 
-                                line=dict(color="white"), mode='lines+markers', name='Nowcast'))
-    # Edit the layout
-    fig_qx.update_layout(title='Nowcast for ' + q,  barmode='stack',    
-                        xaxis_title='Date', yaxis_title='Quarterly Log-Differnece Growth Rate (%)',
-                        legend_title = "Sector: Topic",
-                        hovermode="x", hoverlabel = dict(namelength = -1), # https://github.com/plotly/plotly.js/issues/460
-                        autosize=False, width=1200, height=500,
-                        margin=dict(l=20, r=20, t=40, b=20), template="plotly_dark")
-    # delete the hover template
-    fig_qx.update_yaxes(hoverformat=".2f")
-    fig_qx.update_traces(hovertemplate=None)
-    
-    news_labels = {"series" : "Series", 
-                  "dataset" : "Dataset",
-                  "label" : "Label",
-                  "observed" : "Release",
-                  "forecast (prev)" : "Forecast",  # "date", "update date",
-                  "news" : "News",
-                  "weight" : "Weight",
-                  "impact" : "Impact",
-                  "broad_sector" : "Sector",
-                  "topic" : "Topic"}
-    news_vars = list(news_labels.keys())
-    news_latest_quarter_dict = news_qx.loc[news_qx.date == date, news_vars]
-    news_latest_quarter_dict[news_vars[3:8]] = news_latest_quarter_dict[news_vars[3:8]].transform(lambda x: x.round(3))
-    news_latest_quarter_dict = news_latest_quarter_dict.rename(columns=news_labels)[list(news_labels.values())].to_dict('records')
-    return fig_qx, news_latest_quarter_dict
 
 if __name__ == '__main__':
     app.run_server(debug=True)
