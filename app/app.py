@@ -46,6 +46,7 @@ news["sector_topic"] = news.broad_sector + ": " + news.topic
 server = Flask(__name__)
 app = Dash(server = server, external_stylesheets=[dbc.themes.CYBORG]) #[dbc.themes.CYBORG]) #  # QUARTZ
 
+app.title = "SA Nowcast" # Set website title
 # # https://dash.plotly.com/dash-daq/darkthemeprovider
 # theme = {
 #     'dark': True,
