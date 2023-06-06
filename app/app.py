@@ -82,7 +82,7 @@ app.layout = dbc.Container([
         dcc.Tab(label='Latest Nowcast Quarter', children=[
             # dash_table.DataTable(data=nowcast.to_dict('records'), page_size=10),
             html.Br(),
-            html.H5("Nowcast evolution for Latest Quarter"),
+            html.H5("Nowcast Evolution for Latest Quarter"),
             html.Hr(),
             dbc.Row([
                 dcc.Graph(figure = {}, id='nowcast-qx')
@@ -206,7 +206,7 @@ def update_nccq_graphs(var, date):
                                 line=dict(color="white"), mode='lines+markers', name='Nowcast'))
     # Edit the layout
     fig_qx.update_layout(title='Nowcast for ' + q,  barmode='stack',    
-                        xaxis_title='Date', yaxis_title='Quarterly Log-Differnece Growth Rate (%)',
+                        xaxis_title='Date', yaxis_title='Quarterly Log-Difference Growth Rate (%)',
                         legend_title = "Sector: Topic",
                         hovermode="x", hoverlabel = dict(namelength = -1), # https://github.com/plotly/plotly.js/issues/460
                         autosize=False, width=1200, height=500,
