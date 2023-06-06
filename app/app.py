@@ -112,10 +112,10 @@ app.layout = dbc.Container([
                     ], width=6),
                 ])
         ]),
-        dcc.Tab(label='Nowcast Latest Quarter', children=[
+        dcc.Tab(label='Latest Nowcast Quarter', children=[
             # dash_table.DataTable(data=nowcast.to_dict('records'), page_size=10),
             html.Br(),
-            html.H5("Nowcast for Latest Quarter"),
+            html.H5("Nowcast evolution for Latest Quarter"),
             html.Hr(),
             dbc.Row([
                 dcc.Graph(figure = {}, id='nowcast-qx')
