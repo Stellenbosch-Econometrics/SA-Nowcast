@@ -119,7 +119,7 @@ app.layout = dbc.Container([
             ]) #,
             # html.Br()
         ]),
-        dcc.Tab(label='Nowcasts', children=[
+        dcc.Tab(label='All Nowcasts', children=[
                 html.Br(),
                 html.H5("All Nowcasts and News Releases"),
                 html.Hr(),
