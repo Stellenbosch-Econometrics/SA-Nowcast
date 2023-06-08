@@ -119,20 +119,21 @@ app.layout = dbc.Container([
                                inline=True, inputStyle={"margin-right": "5px", "margin-left": "20px"}, 
                                style={"margin-bottom": "10px"}),
                 dash_table.DataTable(data = news_labels_df.to_dict("records"), 
+                                     columns = [{"name": i, "id": i} for i in news_labels_df.columns],
                                      page_size=50, id='nowcast-qx-news', 
-                                    style_table={'overflowX': 'scroll'},
-                                    style_header={
-                                        'backgroundColor': 'rgb(30, 30, 30)',
-                                        'border': "0px",
-                                        'fontWeight': 'bold'
-                                    },
-                                    style_cell={
-                                        'backgroundColor': '#111111',
-                                        'border': "0px",
-                                        'color': 'white',
-                                        'padding-right': '15px'
-                                    }
-                )
+                                     style_table={'overflowX': 'scroll'},
+                                     style_header={
+                                         'backgroundColor': 'rgb(30, 30, 30)',
+                                         'border': "0px",
+                                         'fontWeight': 'bold'
+                                         },
+                                     style_cell={
+                                         'backgroundColor': '#111111',
+                                         'border': "0px",
+                                         'color': 'white',
+                                         'padding-right': '15px'
+                                         }
+                                     )
             ]) #,
             # html.Br()
         ]),
