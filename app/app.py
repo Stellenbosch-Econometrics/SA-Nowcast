@@ -19,6 +19,21 @@ series = pd.read_csv("https://raw.githubusercontent.com/Stellenbosch-Econometric
 news = news.merge(series, 
                   left_on = "updated variable", 
                   right_on = "series", how = "left")
+
+news_labels = {"Series" : "series", 
+               "Dataset" : "dataset",
+               "Label" : "label",
+               "Release" : "observed",
+               "Forecast" : "forecast (prev)",  # "date", "update date",
+               "News" : "news",
+               "Weight" : "weight",
+               "Impact" : "impact",
+               "Sector" : "broad_sector",
+               "Topic" : "topic"}
+
+news_labels_rev = {v:k for k, v in news_labels.items()}
+news_labels_df = pd.DataFrame(news_labels, index = ["1"])
+
 # format this to month-day
 q = nowcast.quarter.max()
 nowcast_latest_quarter = nowcast.loc[nowcast.quarter == q]
@@ -103,20 +118,22 @@ app.layout = dbc.Container([
                 dcc.RadioItems(options=nowcast_dates, value = all_nowcast_dates[-1], id='nc-date', 
                                inline=True, inputStyle={"margin-right": "5px", "margin-left": "20px"}, 
                                style={"margin-bottom": "10px"}),
-                dash_table.DataTable(data = None, page_size=50, id='nowcast-qx-news', 
-                                    style_table={'overflowX': 'scroll'},
-                                    style_header={
-                                        'backgroundColor': 'rgb(30, 30, 30)',
-                                        'border': "0px",
-                                        'fontWeight': 'bold'
-                                    },
-                                    style_cell={
-                                        'backgroundColor': '#111111',
-                                        'border': "0px",
-                                        'color': 'white',
-                                        'padding-right': '15px'
-                                    }
-                )
+                dash_table.DataTable(data = news_labels_df.to_dict("records"), 
+                                     columns = [{"name": i, "id": i} for i in news_labels_df.columns],
+                                     page_size=50, id='nowcast-qx-news', 
+                                     style_table={'overflowX': 'scroll'},
+                                     style_header={
+                                         'backgroundColor': 'rgb(30, 30, 30)',
+                                         'border': "0px",
+                                         'fontWeight': 'bold'
+                                         },
+                                     style_cell={
+                                         'backgroundColor': '#111111',
+                                         'border': "0px",
+                                         'color': 'white',
+                                         'padding-right': '15px'
+                                         }
+                                     )
             ]) #,
             # html.Br()
         ]),
@@ -217,22 +234,10 @@ def update_nccq_graphs(var, date):
     fig_qx.update_traces(hovertemplate=None)
     
     # %%
-    news_labels = {"series" : "Series", 
-                  "dataset" : "Dataset",
-                  "label" : "Label",
-                  "observed" : "Release",
-                  "forecast (prev)" : "Forecast",  # "date", "update date",
-                  "news" : "News",
-                  "weight" : "Weight",
-                  "impact" : "Impact",
-                  "broad_sector" : "Sector",
-                  "topic" : "Topic"}
-    # %%
-    news_vars = list(news_labels.keys())
+    news_vars = list(news_labels.values())
     news_latest_quarter_dict = news_qx.loc[news_qx.date == date, news_vars]
     news_latest_quarter_dict[news_vars[3:8]] = news_latest_quarter_dict[news_vars[3:8]].transform(lambda x: x.round(3))
-    news_latest_quarter_dict = news_latest_quarter_dict.rename(columns=news_labels)[
-        ['Series', 'Dataset', 'Label', 'Release', 'Forecast', 'News', 'Weight', 'Impact', 'Sector', 'Topic']].to_dict('records')
+    news_latest_quarter_dict = news_latest_quarter_dict.rename(columns=news_labels_rev).to_dict('records')
     return fig_qx, news_latest_quarter_dict
 
 @callback(
