@@ -200,13 +200,14 @@ app.layout = dbc.Container([
 def update_nccq_graphs(var, date):
     ## Nowcast for latest quarter
     news_qx = news.loc[(news.quarter == q) & (news["impacted variable"] == var)]
-    news_latest_quarter = news_qx.groupby(["date", "sector_topic"]).agg({"impact": "sum"}).reset_index()
+    news_latest_quarter = news_qx.groupby(["date", "sector_topic"]).agg({"impact": "sum"}) \
+               .reset_index().sort_values("sector_topic", ascending=False)
     # news_latest_quarter.impact = news_latest_quarter.impact / 10
-    fig_qx = px.bar(news_latest_quarter, x="date", y="impact", color="sector_topic")
+    fig_qx = px.bar(news_latest_quarter, x="date", y="impact", color="sector_topic", barmode="relative")
     fig_qx.add_trace(go.Scatter(x=nowcast_latest_quarter.date, y=nowcast_latest_quarter[var], 
                                 line=dict(color="white"), mode='lines+markers', name='Nowcast'))
     # Edit the layout
-    fig_qx.update_layout(title='Nowcast for ' + q,  barmode='stack',    
+    fig_qx.update_layout(title='Nowcast for ' + q,   
                         xaxis_title='Date', yaxis_title='Quarterly Log-Difference Growth Rate (%)',
                         legend_title = "Sector: Topic",
                         hovermode="x", hoverlabel = dict(namelength = -1), # https://github.com/plotly/plotly.js/issues/460
