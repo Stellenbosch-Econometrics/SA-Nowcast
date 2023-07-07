@@ -1,58 +1,58 @@
 series,series_orig,dataset,label,freq,unit,seas_adj,broad_sector,topic
-MAN001_I_S,MAN001_I_S,Manufacturing Production and Sales,Total Manufacturing: Volumes,M,Index,True,Real,Production
-MAN001_S_S,MAN001_S_S,Manufacturing Production and Sales,Total Manufacturing: Values,M,Rand,True,Real,Production
-MIN001_I_S,MIN001_I_S,Mining Production and Sales,"Total, Gold Included: Volumes",M,Index,True,Real,Production
-MIN001_S_S,MIN001_S_S,Mining Production and Sales,"Total, Gold Included: Values",M,Rand,True,Real,Production
-ELE002_I_S,ELE002_I_S,Electricity Generated and Available for Distribution,Physical Volume of Electricity Production: Volumes,M,Index,True,Real,Production
-ELE001_S_S,ELE001_S_S,Electricity Generated and Available for Distribution,Electricity Available for Distribution in South Africa: Total - All Producers: Values,M,Gigawatt-hours,True,Real,Production
-MTS003_S,MTS003_S,Motor Trade,Total,M,Rand,True,Real,Sales
-MTS005_N,MTS005_N,Motor Trade,New Vehicle Sales,M,Rand,True,Real,Sales
-RET008_I_S,RET008_I_S,Retail Trade Survey,Total: Volumes,M,,True,Real,Sales
-RET008_S_S,RET008_S_S,Retail Trade Survey,Total: Values,M,Rand,True,Real,Sales
-WHO001_I_S,WHO001_I_S,Wholesale Trade Survey,Total: Volumes,M,Index,True,Real,Sales
-WHO001_S_S,WHO001_S_S,Wholesale Trade Survey,Total: Values,M,Rand,True,Real,Sales
+MAN001_I_S,MAN001_I_S,Manufacturing Production and Sales,"Total Manufacturing, Volumes",M,Index,True,Real,Production
+MAN001_S_S,MAN001_S_S,Manufacturing Production and Sales,"Total Manufacturing, Values",M,Rand Thousands,True,Real,Production
+MIN001_I_S,MIN001_I_S,Mining Production and Sales,"Total, Gold Included, Volumes",M,Index,True,Real,Production
+MIN001_S_S,MIN001_S_S,Mining Production and Sales,"Total, Gold Included, Values",M,Rand Millions,True,Real,Production
+ELE002_I_S,ELE002_I_S,Electricity Generated and Available for Distribution,"Physical Volume of Electricity Production, Volumes",M,Index,True,Real,Production
+ELE001_S_S,ELE001_S_S,Electricity Generated and Available for Distribution,"Electricity Available for Distribution in South Africa: Total - All Producers, Values",M,Gigawatt-Hours,True,Real,Production
+MTS003_S,MTS003_S,Motor Trade,"Real, Total",M,Rand Millions,True,Real,Sales
+MTS005_N,MTS005_N,Motor Trade,"Real, New Vehicle Sales",M,Rand Millions,True,Real,Sales
+RET008_I_S,RET008_I_S,Retail Trade Survey,"Total, Volumes",M,,True,Real,Sales
+RET008_S_S,RET008_S_S,Retail Trade Survey,"Total, Values",M,Rand Millions,True,Real,Sales
+WHO001_I_S,WHO001_I_S,Wholesale Trade Survey,"Total, Volumes",M,Index,True,Real,Sales
+WHO001_S_S,WHO001_S_S,Wholesale Trade Survey,"Total, Values",M,Rand Millions,True,Real,Sales
 CPI60001,CPI60001,CPI Analytical Series,Total Country - Geographic Indices,M,Index,True,Real,Prices
 CPI1000_M_N,CPI1000_M_N,Business Cycles,Consumer Prices,M,Index,True,Real,Prices
 PPI001,PPI001,Producer Price Index,All Groups,M,Index,False,Real,Prices
 PPI027,PPI027,Producer Price Index,Chemicals and Chemical Products,M,Index,False,Real,Prices
 PPI028,PPI028,Producer Price Index,Chemicals Basic: Fertilizers,M,Index,False,Real,Prices
 PPI041,PPI041,Producer Price Index,Electrical Machinery and apparatus:Other,M,Index,False,Real,Prices
-MIG001_A_N0_TA,MIG001_A_N0_TA,Tourism and Migration,Total: Any: All: World,M,Number,True,Real,Tourism
-MIG001_A_A0_TA,MIG001_A_A0_TA,Tourism and Migration,Total: Any: Air (All): World,M,Number,True,Real,Tourism
-MIG011_N_A0_TX,MIG011_N_A0_TX,Tourism and Migration,Overnight (Tourists): Non-Resident: Air (All): World Excluding South Africa,M,Number,True,Real,Tourism
-MIG011_N_N0_TX,MIG011_N_N0_TX,Tourism and Migration,Overnight (Tourists): Non-Resident: All: World Excluding South Africa,M,Number,True,Real,Tourism
-TOU036_S,TOU036_S,Tourism Accommodation Survey,Total Income - Total Industry,M,Rands,True,Real,Tourism
+MIG001_A_N0_TA,MIG001_A_N0_TA,Tourism and Migration,"Total, Residency: Any, Mode of Transport: All, Region: World",M,Number,True,Real,Tourism
+MIG001_A_A0_TA,MIG001_A_A0_TA,Tourism and Migration,"Total, Residency: Any, Mode of Transport: Air (All), Region: World",M,Number,True,Real,Tourism
+MIG011_N_A0_TX,MIG011_N_A0_TX,Tourism and Migration,"Overnight (Tourists), Residency: Non-Resident, Mode of Transport: Air (All), Region: World Excluding South Africa",M,Number,True,Real,Tourism
+MIG011_N_N0_TX,MIG011_N_N0_TX,Tourism and Migration,"Overnight (Tourists), Residency: Non-Resident, Mode of Transport: All, Region: World Excluding South Africa",M,Number,True,Real,Tourism
+TOU036_S,TOU036_S,Tourism Accommodation Survey,Total Income - Total Industry,M,Rands Millions,True,Real,Tourism
 TOU006_S,TOU006_S,Tourism Accommodation Survey,Stay Units Nights Sold - Total Industry,M,Number,True,Real,Tourism
 TOU011_S,TOU011_S,Tourism Accommodation Survey,Occupancy Rate - Total Industry,M,Percentage,True,Real,Tourism
 DIFN003_M_S,DIFN003_M_S,Business Cycles,Leading Indicator,M,Index,True,Real,Other Real
-LAN001_S,LAN001_S,Land Transport Survey,Total: Payload,M,Rand,True,Real,Other Real
-LAN002_S,LAN002_S,Land Transport Survey,Total: Income for Freight Transportation,M,Rand,True,Real,Other Real
-LAN018_S,LAN018_S,Land Transport Survey,Passenger Journeys,M,Passengers,True,Real,Other Real
-LAN019_S,LAN019_S,Land Transport Survey,Income for Passenger Transportation,M,Rand,True,Real,Other Real
-MON0088_M,MON0088_M,Financial Sector,M0,M,Rand,True,Financial,Money and Credit
-MON0300_M,MON0300_M,Financial Sector,Total Monetary (M3) Deposits,M,Rand,True,Financial,Money and Credit
-MON0023_M,MON0023_M,Financial Sector,Claims on the Domestic Private Sector,M,Rand,True,Financial,Money and Credit
-MON0191_M,MON0191_M,Financial Sector,Domestic Claims on the Government Sector (Nsa),M,Rand,True,Financial,Money and Credit
-MON0263_M,MON0263_M,Financial Sector,External Position - Net Foreign Assets (Nsa),M,Rand,False,Financial,Other Fiancial
-LIQ002_A_L_A_N,LIQ002_A_L_A_N,Liquidations and Insolvencies,All: Any: Total: Liquidations,M,Number,True,Financial,Other Fiancial
-CURX600_M,CURX600_M,External Sector,Total Exports,M,Rand,True,External,Trade
-CURM600_M,CURM600_M,External Sector,Total Imports,M,Rand,True,External,Trade
-BOP5329_M,BOP5329_M,External Sector,Monthly Exchange Rate of the Rand Against the US Dollar,M,US Dollar,False,External,Exchange Rates
-BOP5393_M,BOP5393_M,External Sector,Nominal Effective Exchange Rate,M,Index,False,External,Exchange Rates
-BOP5806_M,BOP5806_M,External Sector,Official Reserve Assets,M,US Dollar,False,External,Reserves
-BOP5272_M,BOP5272_M,External Sector,Foreign Currency Reserves,M,US Dollar,False,External,Reserves
-NGFC020_M,NGFC020_M,Fiscal Sector,Cash-Flow Revenue,M,Rand,True,Fiscal,Cash Flow
-NGFC040_M,NGFC040_M,Fiscal Sector,Cash-Flow Expenditure,M,Rand,True,Fiscal,Cash Flow
-NGFC050_M,NGFC050_M,Fiscal Sector,Cash-Flow Balance (Deficit -/Surplus +),M,Rand,True,Fiscal,Cash Flow
-NGFC102_M,NGFC102_M,Fiscal Sector,Domestic Government Bonds,M,Rand,True,Fiscal,Financing
-NGFC103_M,NGFC103_M,Fiscal Sector,Foreign Bonds and Loans,M,Rand,False,Fiscal,Financing
-NGFC101_M,NGFC101_M,Fiscal Sector,Treasury Bills and Short-Term Loans,M,Rand,True,Fiscal,Financing
-NGFC006_M,NGFC006_M,Fiscal Sector,Change in Cash Balances,M,Rand,True,Fiscal,Financing
-NGFC100_M,NGFC100_M,Fiscal Sector,Total Net Financing,M,Rand,True,Fiscal,Financing
-NGD1213_M,NGD1213_M,Fiscal Sector,Total Gross Loan Debt,M,Rand,True,Fiscal,Debt
-NGD1209_M,NGD1209_M,Fiscal Sector,Domestic Marketable,M,Rand,True,Fiscal,Debt
-NGD7900_M,NGD7900_M,Fiscal Sector,Foreign Debt,M,Rand,False,Fiscal,Debt
-NGD4500_M,NGD4500_M,Fiscal Sector,Domestic Non-Marketable,M,Rand,True,Fiscal,Debt
+LAN001_S,LAN001_S,Land Transport Survey,"Total: Payload, Values",M,Rand Millions,True,Real,Other Real
+LAN002_S,LAN002_S,Land Transport Survey,"Total: Income for Freight Transportation, Values",M,Rand Millions,True,Real,Other Real
+LAN018_S,LAN018_S,Land Transport Survey,"Passenger Journeys, Volumes",M,Passengers Thousands,True,Real,Other Real
+LAN019_S,LAN019_S,Land Transport Survey,"Income for Passenger Transportation, Values",M,Rand Millions,True,Real,Other Real
+MON0088_M,MON0088_M,Financial Sector,M0,M,Rand Millions,True,Financial,Money and Credit
+MON0300_M,MON0300_M,Financial Sector,Total Monetary (M3) Deposits,M,Rand Millions,True,Financial,Money and Credit
+MON0023_M,MON0023_M,Financial Sector,Claims on the Domestic Private Sector,M,Rand Millions,True,Financial,Money and Credit
+MON0191_M,MON0191_M,Financial Sector,Domestic Claims on the Government Sector (Nsa),M,Rand Millions,True,Financial,Money and Credit
+MON0263_M,MON0263_M,Financial Sector,External Position - Net Foreign Assets (Nsa),M,Rand Millions,False,Financial,Other Fiancial
+LIQ002_A_L_A_N,LIQ002_A_L_A_N,Liquidations and Insolvencies,"Organisation Type: All, Origination: Any, Total, Insolvency Type: Liquidations",M,Number,True,Financial,Other Fiancial
+CURX600_M,CURX600_M,External Sector,Total Exports,M,Rand Millions,True,External,Trade
+CURM600_M,CURM600_M,External Sector,Total Imports,M,Rand Millions,True,External,Trade
+BOP5329_M,BOP5329_M,External Sector,Monthly Exchange Rate of the Rand Against the US Dollar,M,US Dollar Units,False,External,Exchange Rates
+BOP5393_M,BOP5393_M,External Sector,Nominal Effective Exchange Rate,M,Index Units,False,External,Exchange Rates
+BOP5806_M,BOP5806_M,External Sector,Official Reserve Assets,M,US Dollar Millions,False,External,Reserves
+BOP5272_M,BOP5272_M,External Sector,Foreign Currency Reserves,M,US Dollar Millions,False,External,Reserves
+NGFC020_M,NGFC020_M,Fiscal Sector,"Cash-Flow Revenue, Nominal",M,Rand Millions,True,Fiscal,Cash Flow
+NGFC040_M,NGFC040_M,Fiscal Sector,"Cash-Flow Expenditure, Nominal",M,Rand Millions,True,Fiscal,Cash Flow
+NGFC050_M,NGFC050_M,Fiscal Sector,"Cash-Flow Balance (Deficit -/Surplus +), Nominal",M,Rand Millions,True,Fiscal,Cash Flow
+NGFC102_M,NGFC102_M,Fiscal Sector,"Domestic Government Bonds, Nominal",M,Rand Millions,True,Fiscal,Financing
+NGFC103_M,NGFC103_M,Fiscal Sector,"Foreign Bonds and Loans, Nominal",M,Rand Millions,False,Fiscal,Financing
+NGFC101_M,NGFC101_M,Fiscal Sector,"Treasury Bills and Short-Term Loans, Nominal",M,Rand Millions,True,Fiscal,Financing
+NGFC006_M,NGFC006_M,Fiscal Sector,"Change in Cash Balances, Nominal",M,Rand Millions,True,Fiscal,Financing
+NGFC100_M,NGFC100_M,Fiscal Sector,"Total Net Financing, Nominal",M,Rand Millions,True,Fiscal,Financing
+NGD1213_M,NGD1213_M,Fiscal Sector,"Total Gross Loan Debt, Nominal",M,Rand Millions,True,Fiscal,Debt
+NGD1209_M,NGD1209_M,Fiscal Sector,"Domestic Marketable, Nominal",M,Rand Millions,True,Fiscal,Debt
+NGD7900_M,NGD7900_M,Fiscal Sector,"Foreign Debt, Nominal",M,Rand Millions,False,Fiscal,Debt
+NGD4500_M,NGD4500_M,Fiscal Sector,"Domestic Non-Marketable, Nominal",M,Rand Millions,True,Fiscal,Debt
 UNEMP,LABT079_Q_S,Business Cycles,Unemployment Rate,Q,Percentage,True,Real,Other Real
-GDP,KBP6006_N_S,National Accounts,GDP: Nominal,Q,Rand,True,Real,Production
-RGDP,KBP6006_R_S,National Accounts,GDP: Real,Q,Rand,True,Real,Production
+GDP,KBP6006_N_S,National Accounts,"GDP, Nominal",Q,Rand Millions,True,Real,Production
+RGDP,KBP6006_R_S,National Accounts,"GDP, Real",Q,Rand Millions,True,Real,Production
