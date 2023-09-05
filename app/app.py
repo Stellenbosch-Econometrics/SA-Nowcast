@@ -239,6 +239,8 @@ def update_nccq_graphs(var, date):
     news_latest_quarter_dict = news_qx.loc[news_qx.date == date, news_vars]
     news_latest_quarter_dict[news_vars[3:8]] = news_latest_quarter_dict[news_vars[3:8]].transform(lambda x: x.round(3))
     news_latest_quarter_dict = news_latest_quarter_dict.rename(columns=news_labels_rev).to_dict('records')
+    if len(news_latest_quarter_dict) == 0:
+        news_latest_quarter_dict = [{v : None for k, v in news_labels_rev.items()}]
     return fig_qx, news_latest_quarter_dict
 
 @callback(
