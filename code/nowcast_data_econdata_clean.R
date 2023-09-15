@@ -55,7 +55,8 @@ econdata_monthly <- list(
     ),
     Prices = list( # Multiple R-squared:  0.1085
       KBP7155N = c("CPI60001", "CPI1000_M_N"),   # CPI Headline
-      KBP7198M = c("PPI001", "PPI027", "PPI028", "PPI041") # Producer prices. Replaced with total, final manufactures, petrol and motor vehicles
+      KBP7198M = c("PPI1000_M_N", # "PPI001", # Not available anymore. 
+                   "PPI027", "PPI028", "PPI041") # Producer prices. Replaced with total, final manufactures, petrol and motor vehicles
     ),
     Tourism = list( # Multiple R-squared:  0.8654
       MIGRATION = .c(MIG001_A_N0_TA, MIG001_A_A0_TA, MIG011_N_A0_TX, MIG011_N_N0_TX),  # Total + Total Air + Total overnight tourists + Air
