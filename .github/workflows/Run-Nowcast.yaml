@@ -3,10 +3,8 @@ name: Run SA Nowcasting Model
 
 on:
   # Runs whenever we have a new vintage https://stackoverflow.com/questions/62750603/github-actions-trigger-another-action-after-one-action-is-completed
-  workflow_run:
-    workflows: ["Generate A New Vintage"]
-    types:
-      - completed
+  schedule:
+    - cron: '15 1 * * 5'
 
   # Optional Workflow Dispatch Trigger
   workflow_dispatch:
