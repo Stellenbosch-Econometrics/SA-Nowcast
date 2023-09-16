@@ -3,8 +3,10 @@ name: Run SA Nowcasting Model
 
 on:
   # Runs whenever we have a new vintage https://stackoverflow.com/questions/62750603/github-actions-trigger-another-action-after-one-action-is-completed
-  schedule:
-    - cron: '15 1 * * 5'
+  workflow_run:
+    workflows: ["Generate A New Vintage"]
+    types:
+      - completed
 
   # Optional Workflow Dispatch Trigger
   workflow_dispatch:
@@ -12,7 +14,7 @@ on:
 jobs:
   RunSANowcast: 
     runs-on: macos-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    # if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - name: checkout repo content
         uses: actions/checkout@v3 # checkout the repository content
