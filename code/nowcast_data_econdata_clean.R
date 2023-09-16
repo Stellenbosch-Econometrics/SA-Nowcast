@@ -128,7 +128,7 @@ nc_ind <- c(econdata_monthly, econdata_quarterly) %>%
   ftransform(series = X, QB = NULL, X = NULL)
 
 nc_series <- fselect(sm_series(series = nc_ind$series, dataset.info = TRUE), -topic)[nc_ind, on = "series"] %>% 
-             ftransform(srcid = NULL, src_dsid = NULL, provider = NULL, access = NULL) %>% 
+             ftransform(series = setv(series, "PPI1000_M_N", "PPI001"), srcid = NULL, src_dsid = NULL, provider = NULL, access = NULL) %>% 
              colorder(dsid, dataset)
 
 settransform(nc_series,
