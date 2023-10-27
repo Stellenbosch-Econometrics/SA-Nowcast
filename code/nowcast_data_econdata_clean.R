@@ -55,8 +55,7 @@ econdata_monthly <- list(
     ),
     Prices = list( # Multiple R-squared:  0.1085
       KBP7155N = c("CPI60001", "CPI1000_M_N"),   # CPI Headline
-      KBP7198M = c("PPI1000_M_N", # "PPI001", # Not available anymore. 
-                   "PPI027", "PPI028", "PPI041") # Producer prices. Replaced with total, final manufactures, petrol and motor vehicles
+      KBP7198M = c("PPI001", "PPI027", "PPI028", "PPI041") # Producer prices. Replaced with total, final manufactures, petrol and motor vehicles
     ),
     Tourism = list( # Multiple R-squared:  0.8654
       MIGRATION = .c(MIG001_A_N0_TA, MIG001_A_A0_TA, MIG011_N_A0_TX, MIG011_N_N0_TX),  # Total + Total Air + Total overnight tourists + Air
@@ -128,7 +127,7 @@ nc_ind <- c(econdata_monthly, econdata_quarterly) %>%
   ftransform(series = X, QB = NULL, X = NULL)
 
 nc_series <- fselect(sm_series(series = nc_ind$series, dataset.info = TRUE), -topic)[nc_ind, on = "series"] %>% 
-             ftransform(series = setv(series, "PPI1000_M_N", "PPI001"), srcid = NULL, src_dsid = NULL, provider = NULL, access = NULL) %>% 
+             ftransform(srcid = NULL, src_dsid = NULL, provider = NULL, access = NULL) %>% 
              colorder(dsid, dataset)
 
 settransform(nc_series,
@@ -140,15 +139,14 @@ settransform(nc_series,
 
 names_alt <- nc_series %$% set_names(series, series_orig)[series_orig != series]
 
-nc_data_m <- sm_data(series = unlist(econdata_monthly, use.names = FALSE)) %>% 
-             frename(PPI1000_M_N = PPI001)
+nc_data_m <- sm_data(series = unlist(econdata_monthly, use.names = FALSE))
 
 nc_data_q <- sm_data(series = unlist(econdata_quarterly, use.names = FALSE)) %>% frename(names_alt, .nse = FALSE)
 
 # Adjusting Monthly Indicators
 # nc_data_m %>% num_vars() %>% sapply(isSeasonal, freq = 12) %>% which() %>% names()
 # -> not run because seastest has many dependencies
-nc_seas_m <- c("MTS005_N", "PPI001", "CPI60001", "CPI1000_M_N", "MIG001_A_N0_TA", "MIG001_A_A0_TA",
+nc_seas_m <- c("MTS005_N", "CPI60001", "CPI1000_M_N", "MIG001_A_N0_TA", "MIG001_A_A0_TA",
 "MIG011_N_A0_TX", "MIG011_N_N0_TX", "MON0088_M", "MON0300_M",
 "MON0023_M", "MON0191_M", "LIQ002_A_L_A_N", "CURX600_M", "CURM600_M",
 "NGFC020_M", "NGFC040_M", "NGFC050_M", "NGFC102_M", "NGFC101_M",
